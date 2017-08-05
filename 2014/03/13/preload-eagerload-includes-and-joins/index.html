@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="原文：Preload, Eagerload, Includes and Joins Rails 提供了4种方式来加载关联表的数据。在这篇文章中，我们来分别来看看这些方法。 Preloadpreload 使用一条附加的查询语句来加载关联数据。 12345User.preload(:posts).to_a# =&amp;gt;SELECT &quot;users&quot;.* FROM &quot;users&quot;SELECT &quot;posts">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Preload, Eagerload, Includes 和 Joins">
+<meta property="og:url" content="http://yoursite.com/2014/03/13/preload-eagerload-includes-and-joins/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="原文：Preload, Eagerload, Includes and Joins Rails 提供了4种方式来加载关联表的数据。在这篇文章中，我们来分别来看看这些方法。 Preloadpreload 使用一条附加的查询语句来加载关联数据。 12345User.preload(:posts).to_a# =&amp;gt;SELECT &quot;users&quot;.* FROM &quot;users&quot;SELECT &quot;posts">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2014-09-27T11:28:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Preload, Eagerload, Includes 和 Joins">
+<meta name="twitter:description" content="原文：Preload, Eagerload, Includes and Joins Rails 提供了4种方式来加载关联表的数据。在这篇文章中，我们来分别来看看这些方法。 Preloadpreload 使用一条附加的查询语句来加载关联数据。 12345User.preload(:posts).to_a# =&amp;gt;SELECT &quot;users&quot;.* FROM &quot;users&quot;SELECT &quot;posts">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/03/13/preload-eagerload-includes-and-joins/"/>
+
+
+
+
+
+  <title>Preload, Eagerload, Includes 和 Joins | Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/13/preload-eagerload-includes-and-joins/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Preload, Eagerload, Includes 和 Joins</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-13T21:21:00+08:00">
+                2014-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/translation/" itemprop="url" rel="index">
+                    <span itemprop="name">translation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文：<a href="http://blog.bigbinary.com/2013/07/01/preload-vs-eager-load-vs-joins-vs-includes.html" target="_blank" rel="external">Preload, Eagerload, Includes and Joins</a></p>
+<p>Rails 提供了4种方式来加载关联表的数据。在这篇文章中，我们来分别来看看这些方法。</p>
+<h2 id="Preload"><a href="#Preload" class="headerlink" title="Preload"></a>Preload</h2><p><code>preload</code> 使用一条附加的查询语句来加载关联数据。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">User.preload(<span class="symbol">:posts</span>).to_a</div><div class="line"></div><div class="line"><span class="comment"># =&gt;</span></div><div class="line">SELECT <span class="string">"users"</span>.* FROM <span class="string">"users"</span></div><div class="line">SELECT <span class="string">"posts"</span>.* FROM <span class="string">"posts"</span>  WHERE <span class="string">"posts"</span>.<span class="string">"user_id"</span> IN (<span class="number">1</span>)</div></pre></td></tr></table></figure>
+<p>这也是 <code>includes</code> 默认的加载数据的方式。</p>
+<p><code>preload</code> 总是会生成两条 SQL 语句，所以我们不能在 where 条件中使用 <code>posts</code> 表。比如下面的查询就会报错。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">User.preload(<span class="symbol">:posts</span>).where(<span class="string">"posts.desc='ruby is awesome'"</span>)</div><div class="line"></div><div class="line"><span class="comment"># =&gt;</span></div><div class="line">SQLite3::<span class="symbol">SQLException:</span> no such <span class="symbol">column:</span> posts.<span class="symbol">desc:</span> </div><div class="line">SELECT <span class="string">"users"</span>.* FROM <span class="string">"users"</span>  WHERE (posts.desc=<span class="string">'ruby is awesome'</span>)</div></pre></td></tr></table></figure>
+<p><code>preload</code> 也可以指定 where 条件。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">User.preload(<span class="symbol">:posts</span>).where(<span class="string">"users.name='Neeraj'"</span>)</div><div class="line"></div><div class="line"><span class="comment"># =&gt;</span></div><div class="line">SELECT <span class="string">"users"</span>.* FROM <span class="string">"users"</span>  WHERE (users.name=<span class="string">'Neeraj'</span>)</div><div class="line">SELECT <span class="string">"posts"</span>.* FROM <span class="string">"posts"</span>  WHERE <span class="string">"posts"</span>.<span class="string">"user_id"</span> IN (<span class="number">3</span>)</div></pre></td></tr></table></figure>
+<h2 id="Includes"><a href="#Includes" class="headerlink" title="Includes"></a>Includes</h2><p>和 <code>preload</code> 一样，<code>includes</code> 也使用一条附加的查询语句来加载关联数据。</p>
+<p>然而，它要比 <code>preload</code> 更聪明一些。我们刚刚看到了使用 <code>preload</code> 无法查询 <code>User.preload(:posts).where(&quot;posts.desc=&#39;ruby is awesome&#39;&quot;)</code>。让我们使用 <code>includes</code> 来试试看。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">User.includes(<span class="symbol">:posts</span>).where(<span class="string">'posts.desc = "ruby is awesome"'</span>).to_a</div><div class="line"></div><div class="line"><span class="comment"># =&gt;</span></div><div class="line">SELECT <span class="string">"users"</span>.<span class="string">"id"</span> AS t0_r<span class="number">0</span>, <span class="string">"users"</span>.<span class="string">"name"</span> AS t0_r1, <span class="string">"posts"</span>.<span class="string">"id"</span> AS t1_r<span class="number">0</span>, </div><div class="line">       <span class="string">"posts"</span>.<span class="string">"title"</span> AS t1_r1, </div><div class="line">       <span class="string">"posts"</span>.<span class="string">"user_id"</span> AS t1_r2, <span class="string">"posts"</span>.<span class="string">"desc"</span> AS t1_r3 </div><div class="line">FROM <span class="string">"users"</span> LEFT OUTER JOIN <span class="string">"posts"</span> ON <span class="string">"posts"</span>.<span class="string">"user_id"</span> = <span class="string">"users"</span>.<span class="string">"id"</span> </div><div class="line">WHERE (posts.desc = <span class="string">"ruby is awesome"</span>)</div></pre></td></tr></table></figure>
+<p>如你所见，<code>includes</code> 不再使用两条查询语句，而是使用了单独一条 <code>LEFT OUTER JOIN</code> 语句来获取数据，而且也加载了 where 条件。</p>
+<p>所以，<code>includes</code> 在某些场合会从两次查询变成一次查询。默认的简单情况下它会使用两次查询。如果出于某些原因，你想强制其使用单次查询，可以使用 <code>reference</code>。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">User.includes(<span class="symbol">:posts</span>).references(<span class="symbol">:posts</span>).to_a</div><div class="line"></div><div class="line"><span class="comment"># =&gt;</span></div><div class="line">SELECT <span class="string">"users"</span>.<span class="string">"id"</span> AS t0_r<span class="number">0</span>, <span class="string">"users"</span>.<span class="string">"name"</span> AS t0_r1, <span class="string">"posts"</span>.<span class="string">"id"</span> AS t1_r<span class="number">0</span>, </div><div class="line">       <span class="string">"posts"</span>.<span class="string">"title"</span> AS t1_r1, </div><div class="line">       <span class="string">"posts"</span>.<span class="string">"user_id"</span> AS t1_r2, <span class="string">"posts"</span>.<span class="string">"desc"</span> AS t1_r3 </div><div class="line">FROM <span class="string">"users"</span> LEFT OUTER JOIN <span class="string">"posts"</span> ON <span class="string">"posts"</span>.<span class="string">"user_id"</span> = <span class="string">"users"</span>.<span class="string">"id"</span></div></pre></td></tr></table></figure>
+<p>上面的例子就只执行了一次查询。</p>
+<h2 id="Eager-load"><a href="#Eager-load" class="headerlink" title="Eager load"></a>Eager load</h2><p><code>eager_load</code> 使用 <code>LEFT OUTER JOIN</code> 进行单次查询，并加载所有的关联数据。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">User.eager_load(<span class="symbol">:posts</span>).to_a</div><div class="line"></div><div class="line"><span class="comment"># =&gt;</span></div><div class="line">SELECT <span class="string">"users"</span>.<span class="string">"id"</span> AS t0_r<span class="number">0</span>, <span class="string">"users"</span>.<span class="string">"name"</span> AS t0_r1, <span class="string">"posts"</span>.<span class="string">"id"</span> AS t1_r<span class="number">0</span>, </div><div class="line">       <span class="string">"posts"</span>.<span class="string">"title"</span> AS t1_r1, <span class="string">"posts"</span>.<span class="string">"user_id"</span> AS t1_r2, <span class="string">"posts"</span>.<span class="string">"desc"</span> AS t1_r3 </div><div class="line">FROM <span class="string">"users"</span> LEFT OUTER JOIN <span class="string">"posts"</span> ON <span class="string">"posts"</span>.<span class="string">"user_id"</span> = <span class="string">"users"</span>.<span class="string">"id"</span></div></pre></td></tr></table></figure>
+<p>这与 <code>includes</code> 在 <code>where</code> 或 <code>order</code> 语句中指定了 <code>posts</code> 表的属性的情况下的单次查询完全相同。</p>
+<h2 id="Joins"><a href="#Joins" class="headerlink" title="Joins"></a>Joins</h2><p><code>joins</code> 使用 <code>INNER JOIN</code> 来加载关联数据。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">User.joins(<span class="symbol">:posts</span>)</div><div class="line"></div><div class="line"><span class="comment"># =&gt;</span></div><div class="line">SELECT <span class="string">"users"</span>.* FROM <span class="string">"users"</span> INNER JOIN <span class="string">"posts"</span> ON <span class="string">"posts"</span>.<span class="string">"user_id"</span> = <span class="string">"users"</span>.<span class="string">"id"</span></div></pre></td></tr></table></figure>
+<p>上面的语句不会查询出 <code>posts</code> 表的数据。这个查询还可能会得到重复的结果，我们先创建一些数据。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">setup</span></span></div><div class="line">  User.delete_all</div><div class="line">  Post.delete_all</div><div class="line"></div><div class="line">  u = User.create <span class="symbol">name:</span> <span class="string">'Neeraj'</span></div><div class="line">  u.posts.create! <span class="symbol">title:</span> <span class="string">'ruby'</span>, <span class="symbol">desc:</span> <span class="string">'ruby is awesome'</span></div><div class="line">  u.posts.create! <span class="symbol">title:</span> <span class="string">'rails'</span>, <span class="symbol">desc:</span> <span class="string">'rails is awesome'</span></div><div class="line">  u.posts.create! <span class="symbol">title:</span> <span class="string">'JavaScript'</span>, <span class="symbol">desc:</span> <span class="string">'JavaScript is awesome'</span></div><div class="line"></div><div class="line">  u = User.create <span class="symbol">name:</span> <span class="string">'Neil'</span></div><div class="line">  u.posts.create! <span class="symbol">title:</span> <span class="string">'JavaScript'</span>, <span class="symbol">desc:</span> <span class="string">'Javascript is awesome'</span></div><div class="line"></div><div class="line">  u = User.create <span class="symbol">name:</span> <span class="string">'Trisha'</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>有了上面的数据后，当我们执行 <code>User.joins(:posts)</code> 后得到的结果为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#&lt;User id: 9, name: &quot;Neeraj&quot;&gt;</div><div class="line">#&lt;User id: 9, name: &quot;Neeraj&quot;&gt;</div><div class="line">#&lt;User id: 9, name: &quot;Neeraj&quot;&gt;</div><div class="line">#&lt;User id: 10, name: &quot;Neil&quot;&gt;</div></pre></td></tr></table></figure>
+<p>要去除重复数据，可以使用 <code>distinct</code>。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">User.joins(<span class="symbol">:posts</span>).select(<span class="string">'distinct users.*'</span>).to_a</div></pre></td></tr></table></figure>
+<p>另外，如果我们想要得到 <code>posts</code> 表中的属性值，就必须显式地 <code>select</code> 它们。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">records = User.joins(<span class="symbol">:posts</span>).select(<span class="string">'distinct users.*, posts.title as posts_title'</span>).to_a</div><div class="line">records.each <span class="keyword">do</span> <span class="params">|user|</span></div><div class="line">  puts user.name</div><div class="line">  puts user.posts_title</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>值得注意的是，使用 <code>joins</code> 就意味着 <code>user.posts</code> 会执行一次新的查询。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/03/07/be-careful-with-before-all/" rel="next" title="RSpec - 谨慎使用 before(:all)">
+                <i class="fa fa-chevron-left"></i> RSpec - 谨慎使用 before(:all)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/22/iteration-as-an-anti-pattern/" rel="prev" title="反面模式：用迭代循环来构建集合">
+                反面模式：用迭代循环来构建集合 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preload"><span class="nav-number">1.</span> <span class="nav-text">Preload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Includes"><span class="nav-number">2.</span> <span class="nav-text">Includes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eager-load"><span class="nav-number">3.</span> <span class="nav-text">Eager load</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Joins"><span class="nav-number">4.</span> <span class="nav-text">Joins</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

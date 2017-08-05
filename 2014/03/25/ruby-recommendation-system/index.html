@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="原文：Simple recommendation system written in Ruby 我在求职，于是昨天我回顾了一下以前做过的 Rails 项目，试图能给我的简历添上几笔。我找到了一个有意思的老项目，我在其中实现了推荐系统。但也没有很出彩，只是基于博客文章的标签做了推荐。我决定拿出其中的一些代码来写一篇文章。 推荐系统的算法基于 Jaccard 系数，也被称为 Jaccard 相似度系数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ruby 实现的简易推荐系统">
+<meta property="og:url" content="http://yoursite.com/2014/03/25/ruby-recommendation-system/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="原文：Simple recommendation system written in Ruby 我在求职，于是昨天我回顾了一下以前做过的 Rails 项目，试图能给我的简历添上几笔。我找到了一个有意思的老项目，我在其中实现了推荐系统。但也没有很出彩，只是基于博客文章的标签做了推荐。我决定拿出其中的一些代码来写一篇文章。 推荐系统的算法基于 Jaccard 系数，也被称为 Jaccard 相似度系数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload.wikimedia.org/math/1/8/6/186c7f4e83da32e889d606140fae25a0.png">
+<meta property="og:image" content="http://upload.wikimedia.org/math/0/2/9/02906c47e0a08707ad6e35a6c34a43b4.png">
+<meta property="og:updated_time" content="2014-09-27T11:28:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ruby 实现的简易推荐系统">
+<meta name="twitter:description" content="原文：Simple recommendation system written in Ruby 我在求职，于是昨天我回顾了一下以前做过的 Rails 项目，试图能给我的简历添上几笔。我找到了一个有意思的老项目，我在其中实现了推荐系统。但也没有很出彩，只是基于博客文章的标签做了推荐。我决定拿出其中的一些代码来写一篇文章。 推荐系统的算法基于 Jaccard 系数，也被称为 Jaccard 相似度系数">
+<meta name="twitter:image" content="http://upload.wikimedia.org/math/1/8/6/186c7f4e83da32e889d606140fae25a0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/03/25/ruby-recommendation-system/"/>
+
+
+
+
+
+  <title>Ruby 实现的简易推荐系统 | Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/25/ruby-recommendation-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ruby 实现的简易推荐系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-25T21:05:00+08:00">
+                2014-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/translation/" itemprop="url" rel="index">
+                    <span itemprop="name">translation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文：<a href="http://otobrglez.opalab.com/ruby/2014/03/23/simple-ruby-recommendation-system.html" target="_blank" rel="external">Simple recommendation system written in Ruby</a></p>
+<p>我在求职，于是昨天我回顾了一下以前做过的 Rails 项目，试图能给我的简历添上几笔。我找到了一个有意思的老项目，我在其中实现了推荐系统。但也没有很出彩，只是基于博客文章的标签做了推荐。我决定拿出其中的一些代码来写一篇文章。</p>
+<p>推荐系统的算法基于 <a href="http://en.wikipedia.org/wiki/Jaccard_index" target="_blank" rel="external">Jaccard 系数</a>，也被称为 Jaccard 相似度系数。Jaccard 系数是由植物学家 <a href="http://en.wikipedia.org/wiki/Paul_Jaccard" target="_blank" rel="external">Paul Jaccard</a> 提出的，是用来体现样本相似性和差异性的数值。</p>
+<h2 id="运作原理"><a href="#运作原理" class="headerlink" title="运作原理"></a>运作原理</h2><p>取出当前的 item（比如博客文章）和能够很好地描述它的属性（标签、分类或单词）。然后对其它每个 item 计算出它们交集和并集的商。数学过程可以表述为以下公式。</p>
+<p><img src="http://upload.wikimedia.org/math/1/8/6/186c7f4e83da32e889d606140fae25a0.png" alt=""></p>
+<p>该方程的计算结果在 0 到 1 之间。你也能够方便地用以下公式来计算项目间的差异性。</p>
+<p><img src="http://upload.wikimedia.org/math/0/2/9/02906c47e0a08707ad6e35a6c34a43b4.png" alt=""></p>
+<h2 id="Ruby-的实现示例"><a href="#Ruby-的实现示例" class="headerlink" title="Ruby 的实现示例"></a>Ruby 的实现示例</h2><p>下面我将使用书名中的单词来推荐书籍。使用简单的 <code>Book</code> 类即可。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span> &lt; Struct.<span class="title">new</span>(:<span class="title">title</span>)</span></div><div class="line"></div><div class="line">  <span class="comment"># 长度大于2的不重复的单词的数组</span></div><div class="line">  <span class="comment"># 也可以是「标签」或「分类」的数组</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">words</span></span></div><div class="line">    @words <span class="params">||</span>= <span class="keyword">self</span>.title.gsub(<span class="regexp">/[a-zA-Z]&#123;3,&#125;/</span>).map(&amp;<span class="symbol">:downcase</span>).uniq.sort</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p><code>BookRecommender</code> 类使用当前的书籍和书籍数组进行初始化。<code>recommendations</code> 方法会循环数组并给每一个元素设定 <code>jaccard_index</code> 值，最后将书籍进行排序。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BookRecommender</span></span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span> <span class="title">book</span>, <span class="title">books</span></span></div><div class="line">    @book, @books = book, books</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">recommendations</span></span></div><div class="line"></div><div class="line">    <span class="comment"># 计算每个元素的 jaccard_index 值并排序</span></div><div class="line">    @books.map! <span class="keyword">do</span> <span class="params">|this_book|</span></div><div class="line"></div><div class="line">      <span class="comment"># 运行中定义 jaccard_index 的取值 singleton 方法</span></div><div class="line">      this_book.define_singleton_method(<span class="symbol">:jaccard_index</span>) <span class="keyword">do</span></div><div class="line">        @jaccard_index</div><div class="line">      <span class="keyword">end</span></div><div class="line"></div><div class="line">      <span class="comment"># 还有赋值方法</span></div><div class="line">      this_book.define_singleton_method(<span class="string">"jaccard_index="</span>) <span class="keyword">do</span> <span class="params">|index|</span></div><div class="line">        @jaccard_index = index <span class="params">||</span> <span class="number">0</span>.<span class="number">0</span></div><div class="line">      <span class="keyword">end</span></div><div class="line"></div><div class="line">      <span class="comment"># 计算样本的交集</span></div><div class="line">      intersection = (@book.words &amp; this_book.words).size</div><div class="line">      <span class="comment"># ... 和并集</span></div><div class="line">      union = (@book.words <span class="params">| this_book.words).size</span></div><div class="line"><span class="params"></span></div><div class="line"><span class="params">      # 将除法运算的结果赋值，如无法计算则捕捉异常并赋值为0</span></div><div class="line"><span class="params">      this_book.jaccard_index = (intersection.to_f / union.to_f) <span class="keyword">rescue</span> 0.0</span></div><div class="line"><span class="params"></span></div><div class="line"><span class="params">      this_book</span></div><div class="line"><span class="params"></span></div><div class="line"><span class="params">      # 排序</span></div><div class="line"><span class="params">    <span class="keyword">end</span>.sort_by &#123; |</span>book<span class="params">| 1 - book.jaccard_index &#125;</span></div><div class="line"><span class="params"></span></div><div class="line"><span class="params">  <span class="keyword">end</span></span></div><div class="line"><span class="params"></span></div><div class="line"><span class="params"><span class="keyword">end</span></span></div></pre></td></tr></table></figure>
+<p>演示推荐过程：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ...</span></div><div class="line"><span class="comment"># 读取数据并定义书籍数组</span></div><div class="line">BOOKS = DATA.read.split(<span class="string">"\n"</span>).map &#123; <span class="params">|l|</span> Book.new(l) &#125;</div><div class="line"></div><div class="line"><span class="comment"># 定义当前书籍</span></div><div class="line">current_book = Book.new(<span class="string">"Ruby programming language"</span>)</div><div class="line"></div><div class="line"><span class="comment"># 进行推荐...</span></div><div class="line">books = BookRecommender.new(current_book, BOOKS).recommendations</div><div class="line"></div><div class="line">books.each <span class="keyword">do</span> <span class="params">|book|</span></div><div class="line">  puts <span class="string">"<span class="subst">#&#123;book.title&#125;</span> (<span class="subst">#&#123;<span class="string">'%.2f'</span> % book.jaccard_index&#125;</span>)"</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="comment">__END__</span></div><div class="line"><span class="comment">Finding the best language for the job</span></div><div class="line"><span class="comment">Could Ruby save the day</span></div><div class="line"><span class="comment">Python will rock your world</span></div><div class="line"><span class="comment">Is Ruby better than Python</span></div><div class="line"><span class="comment">Programming in Ruby is fun</span></div><div class="line"><span class="comment">Python to the moon</span></div><div class="line"><span class="comment">Programming languages of the future</span></div></pre></td></tr></table></figure>
+<p>下面是名为「Ruby programming language」的书籍的输出结果，右边的数值就是 Jaccard 指数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Programming in Ruby is fun (0.50)</div><div class="line">Programming languages of the future (0.17)</div><div class="line">Is Ruby better than Python (0.17)</div><div class="line">Could Ruby save the day (0.14)</div><div class="line">Finding the best language for the job (0.12)</div><div class="line">Python to the moon (0.00)</div><div class="line">Python will rock your world (0.00)</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是纯粹基于 Ruby 的解决方案，<a href="https://gist.github.com/otobrglez/9738998" target="_blank" rel="external">源代码在我的 gist 上</a>。我还写了使用标签的 <a href="https://gist.github.com/otobrglez/1078953" target="_blank" rel="external">PostgresSQL 版本</a>。但要注意的是，当样本变得很大以后代码的执行速度也会变慢，因此不要每次操作 item 时都运行推荐，更好的方法是定义后台服务在后台进行推荐的计算。</p>
+<p>希望你能够在自己的项目中用到这个方法，也请给我反馈。谢谢！：）</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/03/22/iteration-as-an-anti-pattern/" rel="next" title="反面模式：用迭代循环来构建集合">
+                <i class="fa fa-chevron-left"></i> 反面模式：用迭代循环来构建集合
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/31/length-vs-size-vs-count/" rel="prev" title="Ruby 风格元素之 Length vs Size vs Count">
+                Ruby 风格元素之 Length vs Size vs Count <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#运作原理"><span class="nav-number">1.</span> <span class="nav-text">运作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ruby-的实现示例"><span class="nav-number">2.</span> <span class="nav-text">Ruby 的实现示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="程序员，玩家，死理性派，工具控，拖延症，右脑探索者">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Vincent Zhao">
+<meta property="og:url" content="http://yoursite.com/page/4/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="程序员，玩家，死理性派，工具控，拖延症，右脑探索者">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vincent Zhao">
+<meta name="twitter:description" content="程序员，玩家，死理性派，工具控，拖延症，右脑探索者">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/page/4/"/>
+
+
+
+
+
+  <title>Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+   page-home 
+ ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/12/02/change-life-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/12/02/change-life-guide/" itemprop="url">一份关于如何改变人生的指南</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-12-02T21:23:00+08:00">
+                2013-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/liberal-translation/" itemprop="url" rel="index">
+                    <span itemprop="name">liberal-translation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>如果不改变自己的日常生活，就无从谈起改变人生。</p>
+<p>  —— <strong>Mike Murdock</strong></p>
+</blockquote>
+<p>一切都从一个简单的问题开始：你想成为什么样的人？</p>
+<p>你是否希望有朝一日能成为一名作家、音乐家、设计师、极客、语言专家、工匠、漫画家、企业家，或是某个领域里的权威？</p>
+<p>如何才能梦想成真？难道把愿望写在纸上，放到瓶子里抛向大海，希望上天能够帮你实现？不。上天并不会让你的愿望成真。但是<strong>你</strong>，可以。</p>
+<p>你肯定设定了一个宏伟的目标，期望自己在1年或者3个月后达成吧？但光有目标还远远不够。事实上，如果你试着回顾一下自己的经历，就会发现设定很大很长远的目标通常可能并不会奏效。你以前曾经成功过几次呢？</p>
+<p>现在我要在这里宣布一条结论，它基于我这7年来所做的很多很多试验: <strong>如果你不在每天的生活流程上作出改变，那么什么都不会变。</strong></p>
+<p>我尝试过以周为单位的行动计划，一天隔一天的行动，设定很大胆的月间目标，以及许多其他的探索。<strong>但是没有一样能够成功，除非去改变每天的生活。</strong></p>
+<p>如果你不愿意在日常生活中作出改变，那你可能并不是真的想改变自己的人生。你只是觉得心里有这个想法去学习画画、说日语、弹吉他、用php编程等等很酷。你并不是真心想要去实现它。</p>
+<p>所以改变你的每一天吧。让我们来深入的看一看怎么去实现它！</p>
+<h2 id="如何把愿望转换成日常改变"><a href="#如何把愿望转换成日常改变" class="headerlink" title="如何把愿望转换成日常改变"></a>如何把愿望转换成日常改变</h2><p>我们来举一些愿望的例子：</p>
+<ul>
+<li>减肥</li>
+<li>写一本书</li>
+<li>克服拖延症</li>
+<li>开始一段恋情</li>
+<li>变的更开心</li>
+<li>环游世界</li>
+<li>多喝水</li>
+<li>学习西班牙语</li>
+<li>有一笔存款</li>
+<li>多拍照片</li>
+<li>多读书</li>
+</ul>
+<p>怎样把这些很高尚的想法变成日常生活流程的改变？你要好好思考一下，每天采取一些什么样的行动，才会让你的愿望实现，或至少能让你更接近目标。有时这并非那么容易就想出来，让我们来看一些例子:</p>
+<ul>
+<li><strong>减肥</strong> — 每天步行，刚开始时每天10分钟，一周后延长到15分钟，再然后20分钟… 当你每天能步行30-40分钟的时候，开始另一项行动 — 比如喝纯净水来代替碳酸饮料。</li>
+<li><strong>写一本书</strong> — 每天抽出10分钟来写作。</li>
+<li><strong>克服拖延症</strong> — 我经常能听到人们把克服拖延症这个行动拖后的笑话。不论如何，以下是每天采取的行动: 每天早上选定一个当天对你来说最重要的任务，然后在打开浏览器或手机之前花10分钟执行这个任务。</li>
+<li><strong>开始一段恋情</strong> — 每天去一些能够和陌生人见面或社交的地方。或者每天做一些功课来使自己成为一个有魅力的人。</li>
+<li><strong>变的更开心</strong> — 每天做一些能让这个世界更美好的事，去帮助别人。</li>
+<li><strong>环游世界</strong> — 存一笔钱(见下一条)。或者尽量卖掉你的所有物，以便能够让自己把所有的东西都塞进背包并开始搭顺风车。</li>
+<li><strong>有一笔存款</strong> — 削减小的开支。自己在家做饭。卖掉你的汽车，改为骑自行车、步行或坐火车。换一个小点的房子。做不花钱的活动来代替购物。</li>
+<li><strong>多喝水</strong> — 一起床就喝水，每次休息的时候都喝水(一小时一次)。</li>
+<li><strong>学习西班牙语</strong> — 在 <a href="http://ankisrs.net/" target="_blank" rel="external">Anki</a> 上学习西语的语句，每天花10分钟听 <a href="http://www.pimsleur.com/" target="_blank" rel="external">Pimsleur</a> 的录音。</li>
+<li><strong>多拍照片</strong> — 每天吃饭的时候拍些照片(但是拜托，不要拍你的食物)并把照片发布到你的博客上。</li>
+<li><strong>多读书</strong> — 每天早上和入睡前阅读。</li>
+</ul>
+<p>你大概脑子里有概念了。这些并不一定就是最佳方法，你可以根据你自己的情况作出调整。重点是: 每天都去做。</p>
+<h2 id="如何执行日常改变"><a href="#如何执行日常改变" class="headerlink" title="如何执行日常改变"></a>如何执行日常改变</h2><p>方法很简单，如果你真的去执行的话，几乎毫不费力:</p>
+<ol>
+<li><strong>一次只做一项改变</strong>。你可以尝试挑战这个规则，但失败以后千万别惊讶。持续做一个月以后，再考虑进行下一项改变。只有当前的改变成功的转换为了习惯以后，再开始下一项。</li>
+<li><strong>以很少的量开始。</strong>好吧，这话我已经说了无数遍了，虽然还是有人置之不理。刚开始的时候每天花10分钟，或更少。如果觉得太难，5分钟也许更好。如果还是失败了，降低到2分钟。</li>
+<li><strong>每天在同样的时间去做。</strong>OK, 并不是定死了像每天早上6点钟那样同一时间。而是和你的日常生活挂上钩，比如早上喝第一杯咖啡的时候，到达办公室之后，回家以后，刷完牙以后，洗澡，吃早饭，起床，吃午饭，开电脑之后，每天第一次见到你的妻子的时候。</li>
+<li><strong>向某个人承诺。</strong>或者向多人承诺。确保对方是你尊敬的人。拿我自己的例子来说，我跟好朋友Tynan保证了每天学习PHP编程10分钟。我也向我的妻子承诺过，还有别的朋友们，博客的读者们，一份关岛报纸的读者们，我的孩子们，等等。</li>
+<li><strong>每天记录。</strong>拿我和Tynan学习编程来说。每天我会更新一个保存在Google上的文件来记录每天的学习时间，所以他能够(并且他也做了)去检查那个文件。使用什么工具并不重要，你可以发到Facebook或者Twitter上，给对方发邮件，在日历上标记一下，或者亲自向他汇报。只要保证你每天都记录，而不是一个月才记录一次。还要确保你的承诺对象他会去检查。如果他不检查你的成果，你就要考虑换一个人或者小组了。</li>
+<li><strong>让行为产生后果。</strong>你做或者没照做你的日常改变最重要的后果就是，如果你没做，人们对你的敬意就会减少，如果你坚持了下来，别人会更加敬重你。如果你的记录系统没能达到这个效果，那你得换一个方法。你可能要换一位检查你日常记录的同伴。你也可以尝试其他有趣的结果: 有一个好友在Facebook上承诺，每次他没有遵守诺言的话就会捐赠50美元到Mitt Romney的活动。我也承诺过比如吃鲸鱼寿司(所以我绝不会失败，因为吃鲸鱼寿司对我来说痛不欲生，就像吃小孩一样)，也承诺过如果失败的话会在一群陌生人面前唱一首日文歌。当然也可以是积极正面的结果 —— 比如如果你每天都如约做了日常改变，每周都给自己一个大大的奖励。如果你连着两天都失败了，让惩罚变的重一些。连续三天的话得要来个巨大的惩罚。</li>
+<li><strong>享受变化。</strong>如果你不享受这个过程，你就会尝试去找别的事情做。如果每天的变化行动让你感觉无聊琐碎，你可能在用错误的方法。找到一个能让自己乐在其中的方法，否则你不会坚持很久。或者找一些别的你能够感到快乐的改变。</li>
+</ol>
+<p>就是这些了。7个简单的步骤，你就能改变你的人生。这些步骤里面没有哪一个是很不可能实现的 — 其实你可以从今天就开始。</p>
+<p>好了，你今天会作出什么日常改变呢？</p>
+<blockquote>
+<p>一年以后，你会后悔要是今天就开始的话会多好。</p>
+<p> ——<strong>Karen Lamb</strong></p>
+</blockquote>
+<p>原文: <a href="http://zenhabits.net/change/" target="_blank" rel="external">How to Change Your Life: A User’s Guide</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/11/22/embrace-test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/11/22/embrace-test/" itemprop="url">拥抱测试</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-22T20:54:00+08:00">
+                2013-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>程序员一般都不喜欢写测试代码。而不久之前，我也是其中一员。从自身的经验出发，以前反感写测试代码的理由有以下几点。</p>
+<ul>
+<li><strong>觉得写测试代码不是创造性劳动。</strong>相比实现代码，写测试代码的时候确实少了一份激情。因为这些代码并不会给 Application 增加 feature，或提高性能。花了很多时间，进度却没有向前，难免有所抵触。</li>
+<li><strong>觉得测试代码没有价值。</strong>传统的 Web 开发方式中，我们确认自己的代码能够正常运作的方式通常是亲自去浏览器上操作运行后的页面。等到自己感觉 OK 了，为了应付客户要求或者纯粹追求覆盖率，才不得不写测试代码。此时自己对实现代码已经颇有信心，所以写完测试代码后，绝大多数情况下测试都是能够 pass 的，pass 不了多半也是测试代码写的有问题。所以会感觉测试代码并没有发挥出应有的价值。</li>
+<li><strong>测试代码很难维护。</strong>无论是 Application 的需求有变化，或是改动了一些代码。经常发现会破坏了原有的测试代码，导致我们改完了实现代码后不得不再去修改测试代码，使它能够跟上时代的步伐。经过几次之后，测试代码并没有引导我们的开发，反而成了累赘。</li>
+<li><strong>测试的执行速度很慢。</strong>特别是 Ruby 项目的测试，有些项目变大以后执行一次全套的测试甚至需要一个多小时。而平时的开发过程中，执行单个文件中的测试需要一两分钟的案例屡见不鲜。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2013/11/22/embrace-test/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/11/19/factory-girl-syntax-error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/11/19/factory-girl-syntax-error/" itemprop="url">解决使用FactoryGirl时找不到方法的错误</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-19T22:13:00+08:00">
+                2013-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>今天在新建的工程里跑第一个测试。代码的简略版如下。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">'spec_helper'</span></div><div class="line"></div><div class="line">describe User <span class="keyword">do</span></div><div class="line">  describe <span class="string">"#can_login?"</span> <span class="keyword">do</span></div><div class="line">    context <span class="string">"admin"</span> <span class="keyword">do</span></div><div class="line">      user = build(<span class="symbol">:admin_user</span>)</div><div class="line">      it &#123; expect(user.can_login?).to be_true &#125;</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>但是执行后总是报下列错误，说找不到 <code>build</code> 方法。</p>
+<blockquote>
+<p>undefined method `build’ for #<class:0x35e0470> (NoMethodError)</class:0x35e0470></p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2013/11/19/factory-girl-syntax-error/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/09/20/dots/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/09/20/dots/" itemprop="url">Connect the Dots</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-09-20T23:49:00+08:00">
+                2013-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>第一次听到「Connect the dots」这个概念是在<a href="http://www.ted.com/talks/steve_jobs_how_to_live_before_you_die.html" target="_blank" rel="external">乔布斯的斯坦福大学毕业典礼的演讲</a>上。字面意思是「把点连起来」，引申为将自己零散的知识和创意最终串连起来。</p>
+<p>乔布斯举的例子是他在大学时旁听了字体课程，当时个人电脑还未问世，所以课上讲的是印刷业的字体。在课上乔布斯掌握了衬线字体与无衬线字体等知识，这对于当时沉溺电子制作方面的他似乎毫无用处。但是日后当他在制造第一台图形界面的计算机 Macintosh 时，他将在学校时期学到的字体知识加入其中，使得 Macintosh 中有了很多好看的字体。所以现在的计算机中能够拥有种类繁多的字体，得益于几十年前一位美国大学生上了一门很冷门的课程。听起来很不可思议。但乔布斯就是这样将点连了起来。</p>
+<p>最近，自己也对这句话感受颇深。粗略的回忆了目前为止的人生，找到了不少把零碎的点连起来的例子。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2013/09/20/dots/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/08/22/devenv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/08/22/devenv/" itemprop="url">工作PC装机</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-08-22T22:07:00+08:00">
+                2013-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>（2014年3月更新：由于 Windows XP 即将停止服务，工作机器全部升级为 Windows 7，同时也更新本文。）</p>
+<p>回国后短短的一周时间内，两次从一台崭新的机器开始装各种软件。遂写一篇文章记录安装过程。</p>
+<p>因为是对日外包公司，所以操作系统是日文版的 Windows 7。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2013/08/22/devenv/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/07/31/collect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/07/31/collect/" itemprop="url">收集:一切时间管理和任务管理的前提</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-07-31T20:15:00+08:00">
+                2013-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Getting Things Done(简称GTD) 是 David Allen 提出的一套成熟且完善的时间管理和任务管理的系统。它风靡全球，备受追捧。号称可以让人毫无压力的生活和工作，达到心如止水的境界。</p>
+<p>GTD 的门槛不低，也需要很多的时间和实践才能完整的学会它的流程，领会它的思想。GTD 非常适合那些待办事项非常多，被各种紧急的工作赶着走，忙得焦头烂额，经常会担心自己是否有什么事没做的人。我自己试过几个月之后，颇有杀鸡用牛刀的感觉。因为我的生活和工作中并没有那么多事压得我喘不过气来。试用过后的结论: 现在的情况只需要一个 Todo List 和日历就足以应付。</p>
+<p>无论如何，这里并不准备完整的介绍 GTD，而只是关注 GTD 整个流程的第一步: 收集。「收集」并不是和GTD绑定的一个步骤，无论是否使用 GTD，收集都是一切时间管理和任务管理方法的前提。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2013/07/31/collect/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/02/06/mactype/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/02/06/mactype/" itemprop="url">MacType —— 让 Windows 也能有 Mac 般的字体渲染</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-02-06T21:31:00+08:00">
+                2013-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>用久了 Mac 和 Ubuntu 操作系统回到 Windows XP 后，最受不了的恐怕要数 Windows 平台下糟糕的字体渲染了。很多在 Mac 上很优秀的编程字体到了 Windows 下面锯齿严重，比如 Monaco 或 Menlo， 显示效果可谓惨不忍睹。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2013/02/06/mactype/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/01/19/colorful-cmd-in-windows/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/01/19/colorful-cmd-in-windows/" itemprop="url">在 Windows 的命令提示符 (cmd) 中执行 RSpec 时显示颜色</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-01-19T10:58:00+08:00">
+                2013-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>TDD (测试驱动开发)的常规流程是「红 -&gt; 绿 -&gt; 重构」。<a href="http://rspec.info" target="_blank" rel="external">RSpec</a> 是 Rails 项目中使用的很普遍的一个测试的工具。在 Linux 和 Mac 的 Bash 终端中，Rspec 能够很好的用颜色来显示测试的执行结果。通过的 case 显示为绿色，没通过的用红色来显示。但是 Rspec 在 Windows 的命令行里却看不到 RSpec 五彩缤纷的执行结果，取而代之的是一群丑陋并且有点可笑的符号。</p>
+<p>其实在 Windows 的命令提示符 （cmd.exe） 中也是可以显示 RSpec 执行结果的颜色的。我们需要使用「<a href="https://github.com/adoxa/ansicon" target="_blank" rel="external">ANSICON</a>」这个工具。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2013/01/19/colorful-cmd-in-windows/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

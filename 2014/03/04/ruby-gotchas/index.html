@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="原文：Ruby Gotchas that will come back to haunt you  大多数 Ruby on Rails 的初学者们都会为这个出色的框架着迷，在缺乏 Ruby 语言知识的情况下就开始开发应用程序。这也无可厚非。至少，除非这些初学者们坚持了下来，然后摇身一变，成了没有 Ruby 基础知识的「senior」开发者。 不论如何，不管初学者还是有经验的程序员，迟早都会遇到传说">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ruby 中那些你绕不过的「坑」">
+<meta property="og:url" content="http://yoursite.com/2014/03/04/ruby-gotchas/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="原文：Ruby Gotchas that will come back to haunt you  大多数 Ruby on Rails 的初学者们都会为这个出色的框架着迷，在缺乏 Ruby 语言知识的情况下就开始开发应用程序。这也无可厚非。至少，除非这些初学者们坚持了下来，然后摇身一变，成了没有 Ruby 基础知识的「senior」开发者。 不论如何，不管初学者还是有经验的程序员，迟早都会遇到传说">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/ruby-gotchas.png">
+<meta property="og:updated_time" content="2014-09-27T11:28:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ruby 中那些你绕不过的「坑」">
+<meta name="twitter:description" content="原文：Ruby Gotchas that will come back to haunt you  大多数 Ruby on Rails 的初学者们都会为这个出色的框架着迷，在缺乏 Ruby 语言知识的情况下就开始开发应用程序。这也无可厚非。至少，除非这些初学者们坚持了下来，然后摇身一变，成了没有 Ruby 基础知识的「senior」开发者。 不论如何，不管初学者还是有经验的程序员，迟早都会遇到传说">
+<meta name="twitter:image" content="http://yoursite.com/images/ruby-gotchas.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/03/04/ruby-gotchas/"/>
+
+
+
+
+
+  <title>Ruby 中那些你绕不过的「坑」 | Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/04/ruby-gotchas/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ruby 中那些你绕不过的「坑」</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-04T22:23:00+08:00">
+                2014-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/translation/" itemprop="url" rel="index">
+                    <span itemprop="name">translation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文：<a href="http://blog.elpassion.com/ruby-gotchas" target="_blank" rel="external">Ruby Gotchas that will come back to haunt you</a></p>
+<p><img src="/images/ruby-gotchas.png"></p>
+<p>大多数 Ruby on Rails 的初学者们都会为这个出色的框架着迷，在缺乏 Ruby 语言知识的情况下就开始开发应用程序。这也无可厚非。至少，除非这些初学者们坚持了下来，然后摇身一变，成了没有 Ruby 基础知识的「senior」开发者。</p>
+<p>不论如何，不管初学者还是有经验的程序员，迟早都会遇到传说中的「Ruby 的坑」。这些平时埋伏很深的语言上的细微之处将会耗费我们数个小时的死命调试（<em>puts “1”</em>），查明真相后我们会惊呼「怎么会这样？？！」，「好吧，我发誓这一次我会去看那本镐头封面的书！」，又或者，我们喊了声「操！」然后就去睡觉了。</p>
+<p>我在这篇文章中列举了开发者们需要警惕的 Ruby 中常见的坑。我在每个条目中都给出了示例代码，包括了让人迷惑的或容易出错的代码。</p>
+<p>另外，我也给出了最佳实践来简化你（和维护你代码的人）的生活。如果你对「最佳实践」不感冒，你也可以选择阅读详细的解释来了解为什么这个坑会引发 bug（多数情况下是因为它和你所想的不一样）。</p>
+<a id="more"></a>
+<h2 id="and-or-不同于-amp-amp"><a href="#and-or-不同于-amp-amp" class="headerlink" title="and/or 不同于 &amp;&amp;/||"></a><code>and/or</code> 不同于 <code>&amp;&amp;/||</code></h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">surprise = <span class="literal">true</span> <span class="keyword">and</span> <span class="literal">false</span> <span class="comment"># =&gt; surprise is true</span></div><div class="line">surprise = <span class="literal">true</span> &amp;&amp; <span class="literal">false</span>  <span class="comment"># =&gt; surprise is false</span></div></pre></td></tr></table></figure>
+<h3 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>只使用 <code>&amp;&amp; / ||</code> 运算符。</p>
+<h3 id="详情"><a href="#详情" class="headerlink" title="详情"></a>详情</h3><ul>
+<li><code>and / or</code> 运算符的优先级比  <code>&amp;&amp; / ||</code> 低</li>
+<li><code>and / or</code> 的优先级比 <code>=</code> 低，而 <code>&amp;&amp; / ||</code> 的优先级比 <code>=</code> 高</li>
+<li><code>and</code> 和 <code>or</code> 的优先级相同，而 <code>&amp;&amp;</code> 的优先级比 <code>||</code> 高</li>
+</ul>
+<p>我们来给上述示例代码加上括号，这样就可以明显地看出 <code>and</code> 和 <code>&amp;&amp;</code> 在用法上的不同之处了。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(surprise = <span class="literal">true</span>) <span class="keyword">and</span> <span class="literal">false</span> <span class="comment"># =&gt; surprise is true</span></div><div class="line">surprise = (<span class="literal">true</span> &amp;&amp; <span class="literal">false</span>)  <span class="comment"># =&gt; surprise is false</span></div></pre></td></tr></table></figure>
+<p>也有这样的说法：<code>and / or</code> 用于流程控制，而 <code>&amp;&amp; / ||</code> 用于布尔型运算。但我认为：不要使用这些运算符的关键字版本（<code>and / or / not</code>），而使用更为清晰的 <code>if</code> 和 <code>unless</code> 等。更加明确，更少困惑，更少 bugs。</p>
+<p>延伸阅读：<a href="http://stackoverflow.com/questions/2083112/difference-between-or-and-in-ruby" target="_blank" rel="external">Difference between “or” and || in Ruby?</a></p>
+<h2 id="eql-不同于-（也不同于-equal-或-）"><a href="#eql-不同于-（也不同于-equal-或-）" class="headerlink" title="eql? 不同于 ==（也不同于 equal? 或 ===）"></a><code>eql?</code> 不同于 <code>==</code>（也不同于 <code>equal?</code> 或 <code>===</code>）</h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span> == <span class="number">1.0</span>   <span class="comment"># =&gt; true</span></div><div class="line"><span class="number">1</span>.eql? <span class="number">1.0</span> <span class="comment"># =&gt; false</span></div></pre></td></tr></table></figure>
+<h3 id="最佳实践-1"><a href="#最佳实践-1" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>只使用 <code>==</code> 运算符。</p>
+<h3 id="详情-1"><a href="#详情-1" class="headerlink" title="详情"></a>详情</h3><p><code>==</code>、<code>===</code>、<code>eql?</code> 和 <code>equal?</code> 都是互不相同的运算符，各自有不同的用法，分别用于不同的场合。当你要进行比较时，总是使用 <code>==</code>，除非你有特殊的需求（比如你<strong>真的</strong>需要区分 <code>1.0</code> 和 <code>1</code>）或者出于某些原因重写（override）了某个运算符。</p>
+<p>没错，<code>eql?</code> 可能看起来要比平凡的 <code>==</code> 更为<strong>聪明</strong>，但是你真的需要这样吗，去<strong>区分两个相同的东西</strong>？</p>
+<p>延伸阅读：<a href="http://stackoverflow.com/questions/7156955/whats-the-difference-between-equal-eql-and" target="_blank" rel="external">What’s the difference between equal?, eql?, ===, and ==?</a></p>
+<h2 id="super-不同于-super"><a href="#super-不同于-super" class="headerlink" title="super 不同于 super()"></a><code>super</code> 不同于 <code>super()</code></h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span></div><div class="line">    puts <span class="string">'Foo#show'</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> &lt; Foo</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(text)</span></span></div><div class="line">    <span class="keyword">super</span></div><div class="line"></div><div class="line">    puts text</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Bar.new.show(<span class="string">'test'</span>) <span class="comment"># ArgumentError: wrong number of arguments (1 for 0)</span></div></pre></td></tr></table></figure>
+<h3 id="最佳实践-2"><a href="#最佳实践-2" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>在这里，省略括号可不仅仅是品味（或约定）的问题，而是确实会影响代码的逻辑。</p>
+<h3 id="详情-2"><a href="#详情-2" class="headerlink" title="详情"></a>详情</h3><ul>
+<li>使用 <code>super</code>（没有括号）调用父类方法时，会将传给这个方法的参数原封不动地传给父类方法（因此在 <code>Bar#show</code> 里面的 <code>super</code> 会变成 <code>super(&#39;test&#39;)</code>，引发了错误，因为父类的方法不接收参数）</li>
+<li><code>super()</code>（带括号）在调用父类方法时不带任何参数，正如我们期待的那样。</li>
+</ul>
+<p>延伸阅读：<a href="http://stackoverflow.com/questions/4632224/super-keyword-in-ruby" target="_blank" rel="external">Super keyword in Ruby</a></p>
+<h2 id="自定义异常不能继承-Exception"><a href="#自定义异常不能继承-Exception" class="headerlink" title="自定义异常不能继承 Exception"></a>自定义异常不能继承 <code>Exception</code></h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyException</span> &lt; Exception</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="keyword">begin</span></div><div class="line">  raise MyException</div><div class="line"><span class="keyword">rescue</span></div><div class="line">  puts <span class="string">'Caught it!'</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="comment"># MyException: MyException</span></div><div class="line"><span class="comment">#       from (irb):17</span></div><div class="line"><span class="comment">#       from /Users/karol/.rbenv/versions/2.1.0/bin/irb:11:in `&lt;main&gt;'</span></div></pre></td></tr></table></figure>
+<p>（上述代码不会捕捉到 <code>MyException</code>，也不会显示 <code>&#39;Caught it!&#39;</code> 的消息。）</p>
+<h3 id="最佳实践-3"><a href="#最佳实践-3" class="headerlink" title="最佳实践"></a>最佳实践</h3><ul>
+<li>自定义异常类时，继承 <code>StandardError</code> 或任何其后代子类（越精确越好）。永远不要直接继承 <code>Exception</code>。</li>
+<li>永远不要 <code>rescue Exception</code>。如果你想要大范围捕捉异常，直接使用空的 <code>rescue</code> 语句（或者使用 <code>rescue =&gt; e</code> 来访问错误对象）。</li>
+</ul>
+<h3 id="详情-3"><a href="#详情-3" class="headerlink" title="详情"></a>详情</h3><ul>
+<li>当你使用空的 <code>rescue</code> 语句时，它会捕捉所有继承自 <code>StandardError</code> 的异常，而不是 <code>Exception</code>。</li>
+<li>如果你使用了 <code>rescue Exception</code>（当然你不应该这样），你会捕捉到你无法恢复的错误（比如内存溢出错误）。而且，你会捕捉到 SIGTERM 这样的系统信号，导致你无法使用 CTRL+C 来中止你的脚本。</li>
+</ul>
+<p>延伸阅读：<a href="http://stackoverflow.com/questions/10048173/why-is-it-bad-style-to-rescue-exception-e-in-ruby" target="_blank" rel="external">Why is it bad style to `rescue Exception =&gt; e` in Ruby?</a></p>
+<h2 id="class-Foo-Bar-不同于-module-Foo-class-Bar"><a href="#class-Foo-Bar-不同于-module-Foo-class-Bar" class="headerlink" title="class Foo::Bar 不同于 module Foo; class Bar"></a><code>class Foo::Bar</code> 不同于 <code>module Foo; class Bar</code></h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">MY_SCOPE = <span class="string">'Global'</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Foo</span></span></div><div class="line">  MY_SCOPE = <span class="string">'Foo Module'</span></div><div class="line"></div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Bar</span></span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">scope1</span></span></div><div class="line">      puts MY_SCOPE</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo::Bar</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">scope2</span></span></div><div class="line">    puts MY_SCOPE</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Foo::Bar.new.scope1 <span class="comment"># =&gt; "Foo Module"</span></div><div class="line">Foo::Bar.new.scope2 <span class="comment"># =&gt; "Global"</span></div></pre></td></tr></table></figure>
+<h3 id="最佳实践-4"><a href="#最佳实践-4" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>总是使用长的，更清晰的，module 把 class 包围的写法：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Foo</span></span></div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Bar</span></span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h3 id="详情-4"><a href="#详情-4" class="headerlink" title="详情"></a>详情</h3><ul>
+<li><code>module</code> 关键字（<code>class</code> 和 <code>def</code> 也一样）会对其包围的区域创建新的词法作用域（lexical scope）。所以，上面的 <code>module Foo</code> 创建了 <code>&#39;Foo&#39;</code> 作用域，常量 <code>MY_SCOPE</code> 和它的值 <code>&#39;Foo Module&#39;</code> 就在其中。</li>
+<li>在这个 module 中，我们声明了 <code>class Bar</code>，又会创建新的词法作用域（名为 <code>&#39;Foo::Bar&#39;</code>），它能够访问父作用域（<code>&#39;Foo&#39;</code>）和定义在其中的所有常量。</li>
+<li>然而，当你使用了这个 <code>::</code> 「捷径」来声明 Foo::Bar 时，<code>class Foo::Bar</code> 又创建了一个新的词法作用域，名字也叫 <code>&#39;Foo::Bar&#39;</code>，但它没有父作用域，因此不能访问 <code>&#39;Foo&#39;</code> 里面的东西。</li>
+<li>因此，在 <code>class Foo::Bar</code> 中我们只能访问定义在脚本的开头的 <code>MY_SCOPE</code> 常量（不在任何 module 中），其值为 <code>&#39;Global&#39;</code>。</li>
+</ul>
+<p>延伸阅读：<a href="http://stackoverflow.com/questions/15119724/ruby-lexical-scope-vs-inheritance" target="_blank" rel="external">Ruby – Lexical scope vs Inheritance</a></p>
+<h2 id="多数-bang-方法如果什么都没做就会返回-nil"><a href="#多数-bang-方法如果什么都没做就会返回-nil" class="headerlink" title="多数 bang! 方法如果什么都没做就会返回 nil"></a>多数 <code>bang!</code> 方法如果什么都没做就会返回 <code>nil</code></h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">'foo'</span>.upcase! <span class="comment"># =&gt; "FOO"</span></div><div class="line"><span class="string">'FOO'</span>.upcase! <span class="comment"># =&gt; nil</span></div></pre></td></tr></table></figure>
+<h3 id="最佳实践-5"><a href="#最佳实践-5" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>永远不要依赖于内建的 <code>bang!</code> 方法的返回值，比如在条件语句或流程控制中：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@name.upcase! <span class="keyword">and</span> render <span class="symbol">:show</span></div></pre></td></tr></table></figure>
+<p>上面的代码会造成一些无法预测的行为（或者更准备地说，我们可以预测到当 <code>@name</code> 已经是全部大写的时候就会失败）。另外，这个示例也再一次说明了为什么你不应该使用 <code>and/or</code> 来控制流程。敲两个回车吧，不会有树被砍的。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@name.upcase!</div><div class="line"></div><div class="line">render <span class="symbol">:show</span></div></pre></td></tr></table></figure>
+<h2 id="attribute-value-方法永远返回传给它的-value-而无视-return-值"><a href="#attribute-value-方法永远返回传给它的-value-而无视-return-值" class="headerlink" title="attribute=(value) 方法永远返回传给它的 value 而无视 return 值"></a><code>attribute=(value)</code> 方法永远返回传给它的 <code>value</code> 而无视 <code>return</code> 值</h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">bar=</span><span class="params">(value)</span></span></div><div class="line">    @foo = value</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="string">'OK'</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Foo.bar = <span class="number">3</span> <span class="comment"># =&gt; 3</span></div></pre></td></tr></table></figure>
+<p>（注意这个赋值方法 <code>bar=</code> 返回了 <code>3</code>，尽管我们显式地在最后 <code>return &#39;OK&#39;</code>。）</p>
+<h3 id="最佳实践-6"><a href="#最佳实践-6" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>永远不要依赖赋值方法的返回值，比如下面的条件语句：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">puts <span class="string">'Assigned'</span> <span class="keyword">if</span> (Foo.bar = <span class="number">3</span>) == <span class="string">'OK'</span> <span class="comment"># =&gt; nil</span></div></pre></td></tr></table></figure>
+<p>显然这个语句不会如你所想。</p>
+<p>延伸阅读：<a href="http://stackoverflow.com/questions/6366834/ruby-define-operator-why-cant-control-return-value" target="_blank" rel="external">ruby, define []= operator, why can’t control return value?</a></p>
+<h2 id="private-并不会让你的-self-method-成为私有方法"><a href="#private-并不会让你的-self-method-成为私有方法" class="headerlink" title="private 并不会让你的 self.method 成为私有方法"></a><code>private</code> 并不会让你的 <code>self.method</code> 成为私有方法</h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line"></div><div class="line">  private</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">bar</span></span></div><div class="line">    puts <span class="string">'Not-so-private class method called'</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Foo.bar <span class="comment"># =&gt; "Not-so-private class method called"</span></div></pre></td></tr></table></figure>
+<p>（注意，如果这个方法真的是私有方法，那么 <code>Foo.bar</code> 就会抛出 <code>NoMethodError</code>。）</p>
+<h3 id="最佳实践-7"><a href="#最佳实践-7" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>要让你的类方法变得私有，你需要使用 <code>private_class_method :method_name</code> 或者把你的私有类方法放到 <code>class &lt;&lt; self</code> block 中：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line"></div><div class="line">  <span class="class"><span class="keyword">class</span> &lt;&lt; self</span></div><div class="line">    private    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bar</span></span></div><div class="line">      puts <span class="string">'Class method called'</span></div><div class="line">    <span class="keyword">end</span>    </div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">baz</span></span></div><div class="line">    puts <span class="string">'Another class method called'</span></div><div class="line">  <span class="keyword">end</span></div><div class="line">  private_class_method <span class="symbol">:baz</span></div><div class="line"></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Foo.bar <span class="comment"># =&gt; NoMethodError: private method `bar' called for Foo:Class</span></div><div class="line">Foo.baz <span class="comment"># =&gt; NoMethodError: private method `baz' called for Foo:Class</span></div></pre></td></tr></table></figure>
+<p>延伸阅读：<a href="http://stackoverflow.com/questions/4952980/creating-private-class-method" target="_blank" rel="external">creating private class method</a></p>
+<h2 id="我才不怕这些-Ruby-的坑！"><a href="#我才不怕这些-Ruby-的坑！" class="headerlink" title="我才不怕这些 Ruby 的坑！"></a>我才不怕这些 Ruby 的坑！</h2><p>上面列举的 Ruby 的坑可能看上去没什么大不了的，乍一看似乎只是属于代码风格和约定的范畴。</p>
+<p>但相信我，如果你不重视它们，终有一天你会在 Ruby on Rails 的开发过程中碰到诡异无比的问题。它会让你心碎。因为你已经累觉不爱。然后孤独终老。永远。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/01/26/grateful/" rel="next" title="改变人生的思维习惯">
+                <i class="fa fa-chevron-left"></i> 改变人生的思维习惯
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/07/be-careful-with-before-all/" rel="prev" title="RSpec - 谨慎使用 before(:all)">
+                RSpec - 谨慎使用 before(:all) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#and-or-不同于-amp-amp"><span class="nav-number">1.</span> <span class="nav-text">and/or 不同于 &&/||</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践"><span class="nav-number">1.1.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详情"><span class="nav-number">1.2.</span> <span class="nav-text">详情</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eql-不同于-（也不同于-equal-或-）"><span class="nav-number">2.</span> <span class="nav-text">eql? 不同于 ==（也不同于 equal? 或 ===）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践-1"><span class="nav-number">2.1.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详情-1"><span class="nav-number">2.2.</span> <span class="nav-text">详情</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#super-不同于-super"><span class="nav-number">3.</span> <span class="nav-text">super 不同于 super()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践-2"><span class="nav-number">3.1.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详情-2"><span class="nav-number">3.2.</span> <span class="nav-text">详情</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义异常不能继承-Exception"><span class="nav-number">4.</span> <span class="nav-text">自定义异常不能继承 Exception</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践-3"><span class="nav-number">4.1.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详情-3"><span class="nav-number">4.2.</span> <span class="nav-text">详情</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#class-Foo-Bar-不同于-module-Foo-class-Bar"><span class="nav-number">5.</span> <span class="nav-text">class Foo::Bar 不同于 module Foo; class Bar</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践-4"><span class="nav-number">5.1.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详情-4"><span class="nav-number">5.2.</span> <span class="nav-text">详情</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多数-bang-方法如果什么都没做就会返回-nil"><span class="nav-number">6.</span> <span class="nav-text">多数 bang! 方法如果什么都没做就会返回 nil</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践-5"><span class="nav-number">6.1.</span> <span class="nav-text">最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attribute-value-方法永远返回传给它的-value-而无视-return-值"><span class="nav-number">7.</span> <span class="nav-text">attribute=(value) 方法永远返回传给它的 value 而无视 return 值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践-6"><span class="nav-number">7.1.</span> <span class="nav-text">最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#private-并不会让你的-self-method-成为私有方法"><span class="nav-number">8.</span> <span class="nav-text">private 并不会让你的 self.method 成为私有方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践-7"><span class="nav-number">8.1.</span> <span class="nav-text">最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我才不怕这些-Ruby-的坑！"><span class="nav-number">9.</span> <span class="nav-text">我才不怕这些 Ruby 的坑！</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

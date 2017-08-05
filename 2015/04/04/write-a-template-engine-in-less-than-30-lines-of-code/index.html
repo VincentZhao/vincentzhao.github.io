@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="原文： How to write a template engine in less than 30 lines of code 声明：本文基于模板引擎库 mote。其简洁的代码赋予了我灵感，如果你之前没有探索过模板引擎的内部实现，相信这会是一个绝佳的学习范例。 前言： 什么是模板？模板引擎是一种使用模板来生成文本（字符串）的工具，它还有助于将呈现逻辑与应用逻辑分离。 除非你正在某些有悠久历史的软">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何用少于30行代码实现一个模板引擎">
+<meta property="og:url" content="http://yoursite.com/2015/04/04/write-a-template-engine-in-less-than-30-lines-of-code/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="原文： How to write a template engine in less than 30 lines of code 声明：本文基于模板引擎库 mote。其简洁的代码赋予了我灵感，如果你之前没有探索过模板引擎的内部实现，相信这会是一个绝佳的学习范例。 前言： 什么是模板？模板引擎是一种使用模板来生成文本（字符串）的工具，它还有助于将呈现逻辑与应用逻辑分离。 除非你正在某些有悠久历史的软">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-05T02:32:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何用少于30行代码实现一个模板引擎">
+<meta name="twitter:description" content="原文： How to write a template engine in less than 30 lines of code 声明：本文基于模板引擎库 mote。其简洁的代码赋予了我灵感，如果你之前没有探索过模板引擎的内部实现，相信这会是一个绝佳的学习范例。 前言： 什么是模板？模板引擎是一种使用模板来生成文本（字符串）的工具，它还有助于将呈现逻辑与应用逻辑分离。 除非你正在某些有悠久历史的软">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/04/04/write-a-template-engine-in-less-than-30-lines-of-code/"/>
+
+
+
+
+
+  <title>如何用少于30行代码实现一个模板引擎 | Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/04/write-a-template-engine-in-less-than-30-lines-of-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何用少于30行代码实现一个模板引擎</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-04T19:27:00+08:00">
+                2015-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/translation/" itemprop="url" rel="index">
+                    <span itemprop="name">translation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文： <a href="http://bits.citrusbyte.com/how-to-write-a-template-library/" target="_blank" rel="external">How to write a template engine in less than 30 lines of code</a></p>
+<p>声明：本文基于模板引擎库 <a href="https://github.com/soveran/mote" target="_blank" rel="external">mote</a>。其简洁的代码赋予了我灵感，如果你之前没有探索过模板引擎的内部实现，相信这会是一个绝佳的学习范例。</p>
+<h2 id="前言：-什么是模板？"><a href="#前言：-什么是模板？" class="headerlink" title="前言： 什么是模板？"></a>前言： 什么是模板？</h2><p>模板引擎是一种使用模板来生成文本（字符串）的工具，它还有助于将呈现逻辑与应用逻辑分离。</p>
+<p>除非你正在某些有悠久历史的软件代码中挣扎（或者你开发的是没有用户界面的软件），否则你极有可能已经接触过模板引擎了。</p>
+<p>但是你有没有思考过模板引擎的工作原理呢？你尝试过自己来构建一个吗？如果我们来瞥一眼主流的模板引擎的代码库，你会看到有<a href="https://github.com/ruby/ruby/blob/trunk/lib/erb.rb" target="_blank" rel="external">几百行(erb)</a>的代码，甚至<a href="https://github.com/genki/erubis/" target="_blank" rel="external">几千行(erubis)</a>。即使是名叫 <a href="https://github.com/slim-template/slim" target="_blank" rel="external">slim</a> 的家伙也并没有那么苗条。</p>
+<p>所以你或许会觉得处理模板是一个相当复杂的问题，然而下面我会一步步地向你展示其实你可以只用少量代码就构建出一个模板引擎。</p>
+<p>那让我们开始吧。</p>
+<h2 id="定义特性"><a href="#定义特性" class="headerlink" title="定义特性"></a>定义特性</h2><p>本文我们将要实现的模板引擎只有两条规则：</p>
+<ol>
+<li>以 % 开头的行会被解释为 Ruby 代码。</li>
+<li>可以把 Ruby 代码插入到任何行中 {{ … }} 符号的中间。比如我们可以使用 <code>{{ article.title }}</code>。</li>
+</ol>
+<p>完了？就两条规则？没错，记住，第一条规则让我们可以访问 Ruby 的一切，也就是说所有常见的模板特性（比如循环、调用上层函数、嵌入 partial 等）都可以实现。如此简单的特性甚至还带来了一个额外的好处：你不需要去学一个新的模板语言或者 DSL，因为你已经会 Ruby 了。</p>
+<p>你可以这样来调用其他模板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">% render(&quot;path/to/template.template&quot;, &#123;&#125;)</div></pre></td></tr></table></figure>
+<p>也可以写注释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">% # this is a comment</div></pre></td></tr></table></figure>
+<p>或者执行 blocks ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">% 3.times do |i|</div><div class="line">&#123;% raw %&#125;&#123;&#123;&#123;% endraw %&#125;i&#123;% raw %&#125;&#125;&#125;&#123;% endraw %&#125;</div><div class="line">% end</div></pre></td></tr></table></figure>
+<p>根据上面的特性，我们可以来编写一个示例模板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;body&gt;</div><div class="line">% if access == 0</div><div class="line">  &lt;div&gt; no access :( &lt;/div&gt;</div><div class="line">% else</div><div class="line">  &lt;ul&gt;</div><div class="line">  % data.each do |i|</div><div class="line">    &lt;li&gt;&#123;% raw %&#125;&#123;&#123;&#123;% endraw %&#125;i&#123;% raw %&#125;&#125;&#125;&#123;% endraw %&#125;&lt;/li&gt;</div><div class="line">  % end</div><div class="line">  &lt;/ul&gt;</div><div class="line">% end</div><div class="line">% # comments are just normal ruby comments</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>下面我们称这个模板为 <code>index.template</code>。</p>
+<p>下面我们要做的就是怎样编写一个方法来解析这个模板并输出正确的字符串。在此之前，我们先来看一个中间步骤：如何使用纯粹的 Ruby 代码来输出 HTML。</p>
+<h2 id="与-index-template-行为相同的-render-函数"><a href="#与-index-template-行为相同的-render-函数" class="headerlink" title="与 index.template 行为相同的 render 函数"></a>与 index.template 行为相同的 render 函数</h2><p>在模板引擎出现以前，你同样可以使用纯 Ruby 来达到与 <code>index.template</code> 一样的效果，就像下面的代码：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">render_index</span><span class="params">(access, data)</span></span></div><div class="line">  output = <span class="string">""</span> <span class="comment"># 一个新的字符串，用来存放输出的内容</span></div><div class="line">  output &lt;&lt; <span class="string">"&lt;html&gt;"</span></div><div class="line">  output &lt;&lt; <span class="string">"&lt;body&gt;"</span></div><div class="line"></div><div class="line">  <span class="keyword">if</span> access == <span class="number">0</span></div><div class="line">    output &lt;&lt; <span class="string">"&lt;div&gt; no access :( &lt;/div&gt;"</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">    output &lt;&lt; <span class="string">"&lt;ul&gt;"</span></div><div class="line">    data.each <span class="keyword">do</span> <span class="params">|i|</span></div><div class="line">      output &lt;&lt; <span class="string">"&lt;li&gt;<span class="subst">#&#123; i &#125;</span>&lt;/li&gt;"</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">    output &lt;&lt; <span class="string">"&lt;/ul&gt;"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  output &lt;&lt; <span class="string">"&lt;/body&gt;"</span></div><div class="line">  output &lt;&lt; <span class="string">"&lt;/html&gt;"</span></div><div class="line"></div><div class="line">  <span class="keyword">return</span> output</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>你可以把它粘贴到 IRB 中试试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; render_index(0,[&quot;foo&quot;, &quot;bar&quot;])</div><div class="line">=&gt; &quot;&lt;html&gt;&lt;body&gt;&lt;div&gt; no access :( &lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&quot;</div><div class="line">&gt;&gt; render_index(1,[&quot;foo&quot;, &quot;bar&quot;])</div><div class="line">=&gt; &quot;&lt;html&gt;&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;&quot;</div></pre></td></tr></table></figure>
+<p>假如你的应用涉及的范围非常有限，或许你就根本用不着模板引擎，这样就大功告成了！你可以根据需要自己编写 <code>render_index()</code>、<code>render_header()</code>、<code>render_footer()</code> 方法。PHP 本身其实就是一个模板引擎，这也解释了为什么 PHP 社区的人们会经常这么做。</p>
+<p>然而我们来看 <code>render_index()</code> 的目的是为了探寻如何将 <code>index.template</code> 转换成 <code>render_index()</code> ，并将转换的方法共通化，这样我们的模板引擎就出来了。我们并不想真的去编写 <code>render_index()</code>、<code>render_header()</code>、<code>render_footer()</code> 方法，也不想用代码生成器来实现。我们想要的是能够动态生成一个行为类似 <code>render_index()</code> 的方法，而不是亲手来写 <code>render_index()</code> 方法的代码。</p>
+<p>在看具体的实现方式之前， 我们再来看一个中间步骤：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">define_render_index</span><span class="params">()</span></span></div><div class="line"></div><div class="line">  func = <span class="string">""</span> <span class="comment"># 空字符串，用来存储构建方法的字符串</span></div><div class="line">  func &lt;&lt; <span class="string">"def render_index(access, data) \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"output = \"\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"output &lt;&lt; \"&lt;html&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"output &lt;&lt; \"&lt;body&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"if access == 0\n"</span></div><div class="line">  func &lt;&lt; <span class="string">"  output &lt;&lt; \"&lt;div&gt; no access :( &lt;/div&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"else\n"</span></div><div class="line">  func &lt;&lt; <span class="string">"   output &lt;&lt; \"&lt;ul&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"      data.each do |i|\n"</span></div><div class="line">  func &lt;&lt; <span class="string">"        output &lt;&lt; \"&lt;li&gt; \#&#123; i &#125; &lt;/li&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"      end \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"   output &lt;&lt; \"&lt;/ul&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"end\n"</span></div><div class="line">  func &lt;&lt; <span class="string">"  output &lt;&lt; \"&lt;/body&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"  output &lt;&lt; \"&lt;/html&gt;\" \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"  return output \n"</span></div><div class="line">  func &lt;&lt; <span class="string">"end\n"</span></div><div class="line"></div><div class="line">  eval(func)</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>你可以把它粘贴到 IRB 中并调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; define_render_index() </div><div class="line">=&gt; nil</div><div class="line">&gt;&gt; render_index(1, [&quot;foo&quot;, &quot;bar&quot;])</div><div class="line">=&gt; &quot;&lt;html&gt;&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;&quot;</div></pre></td></tr></table></figure>
+<p>现在我们就得到一个更为完整的蓝图了：我们可以将原始的模板逐行转换为一系列字符串，然后修改这些字符串使其能够被 Ruby 解释。生成了这个方法以后，在调用它时就会执行我们所期望的模板的行为。</p>
+<p>上面这个逐行转换的过程就是我们的 <code>parse</code> 方法的根基，下面就让我们具体来看。</p>
+<h2 id="Parse-方法"><a href="#Parse-方法" class="headerlink" title="Parse 方法"></a>Parse 方法</h2><h3 id="1-使用-Proc"><a href="#1-使用-Proc" class="headerlink" title="1. 使用 Proc"></a>1. 使用 Proc</h3><p>我们不想让 <code>func</code> 字符串像 <code>define_render_index()</code> 一样以一个具名函数开头，所以我们用 Proc 并将其保存至一个变量，有需要时就 <code>.call</code> 它。</p>
+<h3 id="2-设定-Proc-的变量"><a href="#2-设定-Proc-的变量" class="headerlink" title="2. 设定 Proc 的变量"></a>2. 设定 Proc 的变量</h3><p><code>define_render_index()</code> 还写死了其中的变量： access 和 data。但我们需要将变量名传给 <code>parse</code> 函数，这样才能构建定义 Proc 的字符串。这里我们把变量名直接以字符串形式传递给 parse 方法，就像这样：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parse(template, <span class="string">"access, data"</span>)</div></pre></td></tr></table></figure>
+<h3 id="3-将模板逐行转译成函数字符串"><a href="#3-将模板逐行转译成函数字符串" class="headerlink" title="3. 将模板逐行转译成函数字符串"></a>3. 将模板逐行转译成函数字符串</h3><p>上面的 <code>define_render_index()</code> 已经告诉我们逐行处理模板来创建一个新的 Ruby 方法时所需遵循的规则了。这些规则就是：</p>
+<ul>
+<li><p>所有的双引号必须被转义，每一行的内容用双引号围起来，并在每一行的最后添加换行符 “\n”。</p>
+</li>
+<li><p>如果行的第一个字符（不包括空格 ）是 <code>%</code>，就把 <code>%</code> 删除。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">变换前:</div><div class="line">  % if data.empty? </div><div class="line">变换后:</div><div class="line">  &quot;if data.empty?\n&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li>其他的所有行都在前面加上 <code>&quot;output &lt;&lt;&quot;</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">变换前:</div><div class="line">  &lt;html&gt;</div><div class="line">变换后:</div><div class="line">  &quot;output &lt;&lt; \&quot;&lt;html&gt;\&quot; \n&quot;</div></pre></td></tr></table></figure>
+<h3 id="4-…-会被变换为-…"><a href="#4-…-会被变换为-…" class="headerlink" title="4.  …  会被变换为 #{ … }"></a>4. {{ … }} 会被变换为 #{ … }</h3><p>我们会使用正则表达式来实现这一点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">变换前:</div><div class="line">  &lt;li&gt;&#123;% raw %&#125;&#123;&#123;&#123;% endraw %&#125; i &#123;% raw %&#125;&#125;&#125;&#123;% endraw %&#125;&lt;/li&gt; </div><div class="line">变换后:</div><div class="line">  &quot;output &lt;&lt; \&quot;&lt;li&gt; \#&#123; i &#125; &lt;/li&gt;\&quot; \n&quot;</div></pre></td></tr></table></figure>
+<p>要运用上述规则，我们首先要用 <code>.split(&quot;\n&quot;)</code> 将原始模板文件分割成数组，这样数组中的每个元素就是模板文件的每一行了。然后循环这个数组来构建 <code>func</code> 字符串，并最终将其 <code>eval</code>。</p>
+<p>最后，我们得到的 parse 函数如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(template,vars = <span class="string">""</span>)</span></span></div><div class="line">  lines = File.read(template).split(<span class="string">"\n"</span>)</div><div class="line"></div><div class="line">  func = <span class="string">"Proc.new do |<span class="subst">#&#123;vars&#125;</span>| \n output = \"\" \n "</span></div><div class="line"></div><div class="line">  lines.each <span class="keyword">do</span> <span class="params">|line|</span></div><div class="line">    <span class="keyword">if</span> line =~ <span class="regexp">/^\s*(%)(.*?)$/</span></div><div class="line">     func &lt;&lt; <span class="string">" <span class="subst">#&#123;line.gsub(<span class="regexp">/^\s*%(.*?)$/</span>, <span class="string">'\1'</span>) &#125;</span> \n"</span> </div><div class="line">    <span class="keyword">else</span></div><div class="line">     func &lt;&lt; <span class="string">" output &lt;&lt; \" <span class="subst">#&#123;line.gsub(<span class="regexp">/\&#123;\&#123;([^\r\n\&#123;]*)\&#125;\&#125;/</span>, <span class="string">'<span class="subst">#&#123;\<span class="number">1</span>&#125;</span>'</span>) &#125;</span>\" \n "</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  func &lt;&lt; <span class="string">" output; end \n "</span></div><div class="line"></div><div class="line">  eval(func)</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>你可以在 IRB 中亲自尝试一番：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; index = parse(&quot;index.template&quot;, &quot;access, data&quot;)</div><div class="line">=&gt; nil</div><div class="line">&gt;&gt; index.call(1,[&quot;Foo&quot;]) </div><div class="line">=&gt; &quot; &lt;html&gt;\n &lt;body&gt;\n&lt;ul&gt;\n&lt;li&gt;foo&lt;/li&gt; \n&lt;/ul&gt;\n &lt;/body&gt;\n &lt;/html&gt;\n&quot;</div></pre></td></tr></table></figure>
+<p>大功告成了！就这么几行代码，你就实现了一个颇为强劲的模板引擎了。由于没有涉及太多多余的功能，我们将复杂度降到了最低，也提高了模板语言的清晰程度。复杂度的降低能够让应用程序条例更清晰，更不容易出错，还能加快开发特性的速度。</p>
+<h2 id="它能扩展（Scale）吗？"><a href="#它能扩展（Scale）吗？" class="headerlink" title="它能扩展（Scale）吗？"></a>它能扩展（Scale）吗？</h2><p>这里的代码不行！但是 <a href="https://github.com/soveran/mote" target="_blank" rel="external">mote</a>，也就是本文的灵感来源，当然可以。mote 附带了一些 helper 方法和缓存功能，我们已经成功将其运用在了各种大型的 Web 应用中。更不用提 <a href="https://github.com/soveran/mote/blob/master/benchmarks/result.txt" target="_blank" rel="external">mote 的速度相当快</a>。</p>
+<p>同时我还想就其简洁这个显著的特点说两句——虽然 mote 的体积极其小，但对于其要解决的问题给出了一个专注而又完整的解决之道。</p>
+<p>我希望这篇文章能够会对从未探寻过模板引擎的人或者想要做一个模板引擎的人有所帮助。欢迎留下你的评论或者反馈。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/05/my-2014/" rel="next" title="我的2014">
+                <i class="fa fa-chevron-left"></i> 我的2014
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/10/take-a-day-off/" rel="prev" title="怎样让自己休一天假">
+                怎样让自己休一天假 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言：-什么是模板？"><span class="nav-number">1.</span> <span class="nav-text">前言： 什么是模板？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义特性"><span class="nav-number">2.</span> <span class="nav-text">定义特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与-index-template-行为相同的-render-函数"><span class="nav-number">3.</span> <span class="nav-text">与 index.template 行为相同的 render 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parse-方法"><span class="nav-number">4.</span> <span class="nav-text">Parse 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用-Proc"><span class="nav-number">4.1.</span> <span class="nav-text">1. 使用 Proc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-设定-Proc-的变量"><span class="nav-number">4.2.</span> <span class="nav-text">2. 设定 Proc 的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-将模板逐行转译成函数字符串"><span class="nav-number">4.3.</span> <span class="nav-text">3. 将模板逐行转译成函数字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-…-会被变换为-…"><span class="nav-number">4.4.</span> <span class="nav-text">4. {{ … }} 会被变换为 #{ … }</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#它能扩展（Scale）吗？"><span class="nav-number">5.</span> <span class="nav-text">它能扩展（Scale）吗？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

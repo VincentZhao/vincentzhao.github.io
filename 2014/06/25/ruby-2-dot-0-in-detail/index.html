@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="译者注：截至目前，Ruby 的最新版已经更新到了 2.1.2。为什么今时今日还要翻译 2.0.0 版本的变更点呢？众所周知，语言越小众，用户的升级越激进。而 Ruby 进入 1.9 以后，已经名副其实地跻身主流语言。当一门语言被广泛使用以后，版本升级的步伐也会相对放缓。目前我在工作上的项目使用的依然是 Ruby 1.9.3，我当时学习 Ruby 时候的版本的也是 1.9。但显然，将版本升级到 2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ruby 2.0.0 更新详解">
+<meta property="og:url" content="http://yoursite.com/2014/06/25/ruby-2-dot-0-in-detail/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="译者注：截至目前，Ruby 的最新版已经更新到了 2.1.2。为什么今时今日还要翻译 2.0.0 版本的变更点呢？众所周知，语言越小众，用户的升级越激进。而 Ruby 进入 1.9 以后，已经名副其实地跻身主流语言。当一门语言被广泛使用以后，版本升级的步伐也会相对放缓。目前我在工作上的项目使用的依然是 Ruby 1.9.3，我当时学习 Ruby 时候的版本的也是 1.9。但显然，将版本升级到 2">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2014-09-27T11:28:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ruby 2.0.0 更新详解">
+<meta name="twitter:description" content="译者注：截至目前，Ruby 的最新版已经更新到了 2.1.2。为什么今时今日还要翻译 2.0.0 版本的变更点呢？众所周知，语言越小众，用户的升级越激进。而 Ruby 进入 1.9 以后，已经名副其实地跻身主流语言。当一门语言被广泛使用以后，版本升级的步伐也会相对放缓。目前我在工作上的项目使用的依然是 Ruby 1.9.3，我当时学习 Ruby 时候的版本的也是 1.9。但显然，将版本升级到 2">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/06/25/ruby-2-dot-0-in-detail/"/>
+
+
+
+
+
+  <title>Ruby 2.0.0 更新详解 | Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/06/25/ruby-2-dot-0-in-detail/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ruby 2.0.0 更新详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-06-25T20:32:00+08:00">
+                2014-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/translation/" itemprop="url" rel="index">
+                    <span itemprop="name">translation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>译者注：截至目前，Ruby 的最新版已经更新到了 2.1.2。为什么今时今日还要翻译 2.0.0 版本的变更点呢？众所周知，语言越小众，用户的升级越激进。而 Ruby 进入 1.9 以后，已经名副其实地跻身主流语言。当一门语言被广泛使用以后，版本升级的步伐也会相对放缓。目前我在工作上的项目使用的依然是 Ruby 1.9.3，我当时学习 Ruby 时候的版本的也是 1.9。但显然，将版本升级到 2.0 以上是大势所趋，为了全面地了解 1.9.3 到 2.0.0 之间发生了哪些变化，我选择了这篇非常全面的文章进行了翻译。希望对有同样需求的人有所帮助。</p>
+</blockquote>
+<p>原文： <a href="http://globaldev.co.uk/2013/03/ruby-2-0-0-in-detail/" target="_blank" rel="external">Ruby 2.0.0 in Detail</a></p>
+<h2 id="关键字参数（Keyword-arguments）"><a href="#关键字参数（Keyword-arguments）" class="headerlink" title="关键字参数（Keyword arguments）"></a>关键字参数（Keyword arguments）</h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">wrap</span><span class="params">(string, <span class="symbol">before:</span> <span class="string">"&lt;"</span>, <span class="symbol">after:</span> <span class="string">"&gt;"</span>)</span></span></div><div class="line">  <span class="string">"<span class="subst">#&#123;before&#125;</span><span class="subst">#&#123;string&#125;</span><span class="subst">#&#123;after&#125;</span>"</span> <span class="comment"># 无需从 hash 中获取 options</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="comment"># 有无任意</span></div><div class="line">wrap(<span class="string">"foo"</span>)                                  <span class="comment">#=&gt; "&lt;foo&gt;"</span></div><div class="line"><span class="comment"># 数量任意</span></div><div class="line">wrap(<span class="string">"foo"</span>, <span class="symbol">before:</span> <span class="string">"#&lt;"</span>)                    <span class="comment">#=&gt; "#&lt;foo&gt;"</span></div><div class="line">wrap(<span class="string">"foo"</span>, <span class="symbol">after:</span> <span class="string">"]"</span>)                      <span class="comment">#=&gt; "&lt;foo]"</span></div><div class="line"><span class="comment"># 顺序任意</span></div><div class="line">wrap(<span class="string">"foo"</span>, <span class="symbol">after:</span> <span class="string">"]"</span>, <span class="symbol">before:</span> <span class="string">"["</span>)         <span class="comment">#=&gt; "[foo]"</span></div></pre></td></tr></table></figure>
+<p>相比用 hash 来实现的伪关键字参数的方式，该特性的好处之一为，当出现单词拼写错误时会报错。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">begin</span></div><div class="line">  wrap(<span class="string">"foo"</span>, <span class="symbol">befoer:</span> <span class="string">"#&lt;"</span>)</div><div class="line"><span class="keyword">rescue</span> ArgumentError =&gt; e</div><div class="line">  e.message                                  <span class="comment">#=&gt; "unknown keyword: befoer"</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>如同使用一个星号来捕获所有的常规参数一样，可以使用两个星号来捕获所有的关键字参数。两个星号还能用于将 hash 转换为关键字参数。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># arguments</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">capture</span><span class="params">(**opts)</span></span></div><div class="line">  opts</div><div class="line"><span class="keyword">end</span></div><div class="line">capture(<span class="symbol">foo:</span> <span class="string">"bar"</span>)                          <span class="comment">#=&gt; &#123;:foo=&gt;"bar"&#125;</span></div><div class="line"></div><div class="line"><span class="comment"># key 必须为 symbol</span></div><div class="line">opts = &#123;<span class="symbol">:before</span> =&gt; <span class="string">"("</span>, <span class="symbol">:after</span> =&gt; <span class="string">")"</span>&#125;</div><div class="line">wrap(<span class="string">"foo"</span>, **opts)                          <span class="comment">#=&gt; "(foo)"</span></div></pre></td></tr></table></figure>
+<p>关键字参数仍然能够接收旧式的 hash 形式参数，因此你可以放心地更新方法定义，而无需修改每一处调用它的地方。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wrap(<span class="string">"foo"</span>, <span class="symbol">:before</span> =&gt; <span class="string">"&#123;"</span>, <span class="symbol">:after</span> =&gt; <span class="string">"&#125;"</span>)   <span class="comment">#=&gt; "&#123;foo&#125;"</span></div></pre></td></tr></table></figure>
+<p>如果你的库需要兼容 Ruby 2.0 和 1.9，那么仍然可以采用以前的 hash 形式的伪关键字参数，因为调用的时候和关键字参数的写法是一样的。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">wrap</span><span class="params">(string, opts=&#123;&#125;)</span></span></div><div class="line">  before = opts[<span class="symbol">:before</span>] <span class="params">||</span> <span class="string">"&lt;"</span></div><div class="line">  after = opts[<span class="symbol">:after</span>] <span class="params">||</span> <span class="string">"&gt;"</span></div><div class="line">  <span class="string">"<span class="subst">#&#123;before&#125;</span><span class="subst">#&#123;string&#125;</span><span class="subst">#&#123;after&#125;</span>"</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">wrap(<span class="string">"foo"</span>, <span class="symbol">before:</span> <span class="string">"["</span>, <span class="symbol">after:</span> <span class="string">"]"</span>)         <span class="comment">#=&gt; "[foo]"</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="i-和-I-表示-symbol-数组的字面量"><a href="#i-和-I-表示-symbol-数组的字面量" class="headerlink" title="%i 和 %I 表示 symbol 数组的字面量"></a><code>%i</code> 和 <code>%I</code> 表示 symbol 数组的字面量</h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">%i&#123;an array of symbols&#125;   <span class="comment">#=&gt; [:an, :array, :of, :symbols]</span></div></pre></td></tr></table></figure>
+<p>也可以使用插值（interpolation）</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">%I&#123;<span class="comment">#&#123;1 + 1&#125;x #&#123;2 + 2&#125;x&#125;   #=&gt; [:"2x", :"4x"]</span></div></pre></td></tr></table></figure>
+<h2 id="Refinements"><a href="#Refinements" class="headerlink" title="Refinements"></a>Refinements</h2><p>Refinements 是个出色的想法，但目前的实现方式还不成熟，可能会出现诡异的情况或引发性能问题，所以 Ruby 2.0.0 的 Refinements 还处于实验阶段，实用性并不高。</p>
+<p>可以对一个类创建一个 refinement，把它放到一个模块中</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">NumberQuery</span></span></div><div class="line">  refine String <span class="keyword">do</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">number?</span></span></div><div class="line">      match(<span class="regexp">/\A[1-9][0-9]*\z/</span>) ? <span class="literal">true</span> : <span class="literal">false</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>默认情况下，该 refinement 是不可见的</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"123"</span>.respond_to?(<span class="symbol">:number?</span>)   <span class="comment">#=&gt; false</span></div></pre></td></tr></table></figure>
+<p>只有使用 <code>using</code> 来声明要使用这个模块中的 refinement 之后，才会变得可见。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">using NumberQuery</div><div class="line"><span class="string">"123"</span>.number?                 <span class="comment">#=&gt; true</span></div></pre></td></tr></table></figure>
+<p>然而，<code>using</code> 只能够在顶层（top level）使用，并且适用范围仅为同一源文件并且位于声明之后的代码。如果你开启了警告，就会收到关于 refinements 还处于实验阶段的警告。</p>
+<h2 id="Module-prepend"><a href="#Module-prepend" class="headerlink" title="Module#prepend"></a><code>Module#prepend</code></h2><p>为了向 <code>#include</code> 致敬，module 添加了 <code>#prepend</code> 方法，用法与 <code>include</code> 相同，但是是将模块作为当前类的子类插入到继承链中。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Object</div><div class="line">superclass</div><div class="line">included <span class="class"><span class="keyword">module</span></span></div><div class="line"><span class="class"><span class="keyword">class</span></span></div><div class="line">prepended <span class="class"><span class="keyword">module</span></span></div></pre></td></tr></table></figure>
+<p>这个特性可以取代 Rails 的 <code>#alias_method_chain</code>，或者在重新定义方法之前先给它设定一个别名方法再调用原方法的技巧。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">do_stuff</span></span></div><div class="line">    puts <span class="string">"doing stuff"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Wrapper</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">do_stuff</span></span></div><div class="line">    puts <span class="string">"before stuff"</span></div><div class="line">    <span class="keyword">super</span></div><div class="line">    puts <span class="string">"after stuff"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  prepend Wrapper</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Foo.new.do_stuff</div></pre></td></tr></table></figure>
+<p>输出为：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">before stuff</div><div class="line">doing stuff</div><div class="line">after stuff</div></pre></td></tr></table></figure>
+<p>正如 <code>::included</code> 和 <code>::append_features</code> 一样，这次也添加了 <code>::prepended</code> 和 <code>::prepend_features</code>。</p>
+<h2 id="模块中没有被绑定的方法可以被绑定到任意对象"><a href="#模块中没有被绑定的方法可以被绑定到任意对象" class="headerlink" title="模块中没有被绑定的方法可以被绑定到任意对象"></a>模块中没有被绑定的方法可以被绑定到任意对象</h2><p>这个特性听上去有些绕口，你或许以为是永远不会用到的某个小改进，事实上，这是一个很棒的新特性。</p>
+<p>使用 <code>instance_method</code> 可以得到任意类或模块中的方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Object.instance_method(<span class="symbol">:to_s</span>)   <span class="comment">#=&gt; #&lt;UnboundMethod: Object(Kernel)#to_s&gt;</span></div></pre></td></tr></table></figure>
+<p>但这个方法没有被绑定，没有 <code>self</code>，所以无法被调用。要调用它，你必须将其绑定到一个对象上，在 2.0 之前，我们只能把它绑定到相同类的一个对象上。</p>
+<p>然而现在，我们可以从模块中取出任意一个方法并把它绑定到任意对象上了</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Bar</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">bar</span></span></div><div class="line">    <span class="string">"bar"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">baz</span></span></div><div class="line">    <span class="string">"baz"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Bar.instance_method(<span class="symbol">:bar</span>).bind(Object.new).call   <span class="comment">#=&gt; "bar"</span></div></pre></td></tr></table></figure>
+<p>这意味着 <code>define_method</code> 也能接收模块中未绑定的方法了，由此我们可以实现选择性的 <code>include</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Kernel</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">from</span><span class="params">(mod, <span class="symbol">include:</span> [])</span></span></div><div class="line">    raise TypeError, <span class="string">"argument must be a module"</span> <span class="keyword">unless</span> Module === mod</div><div class="line">    <span class="keyword">include</span>.each <span class="keyword">do</span> <span class="params">|name, original|</span></div><div class="line">      define_method(name, mod.instance_method(original <span class="params">||</span> name))</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  from Bar, <span class="symbol">include:</span> &#123;<span class="symbol">:qux</span> =&gt; <span class="symbol">:bar</span>&#125;</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">f = Foo.new</div><div class="line">f.qux                 <span class="comment">#=&gt; "bar</span></div><div class="line">f.respond_to?(<span class="symbol">:baz</span>)   <span class="comment">#=&gt; false</span></div></pre></td></tr></table></figure>
+<h2 id="const-get-能理解命名空间了"><a href="#const-get-能理解命名空间了" class="headerlink" title="const_get 能理解命名空间了"></a><code>const_get</code> 能理解命名空间了</h2><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  <span class="class"><span class="keyword">module</span> <span class="title">Bar</span></span></div><div class="line">    Baz = <span class="number">1</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Object.const_get(<span class="string">"Foo::Bar::Baz"</span>)   <span class="comment">#=&gt; 1</span></div></pre></td></tr></table></figure>
+<h2 id="to-h-成为了转换成-hash-的标准方法"><a href="#to-h-成为了转换成-hash-的标准方法" class="headerlink" title="#to_h 成为了转换成 hash 的标准方法"></a><code>#to_h</code> 成为了转换成 hash 的标准方法</h2><p><code>Hash</code>，以及 <code>ENV</code>、<code>nil</code>、<code>Struct</code> 和 <code>OpenStruct</code> 都有了返回 hash 类型的 <code>#to_h</code> 方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="symbol">:foo</span> =&gt; <span class="string">"bar"</span>&#125;.to_h               <span class="comment">#=&gt; &#123;:foo=&gt;"bar"&#125;</span></div><div class="line"><span class="literal">nil</span>.to_h                           <span class="comment">#=&gt; &#123;&#125;</span></div><div class="line">Struct.new(<span class="symbol">:foo</span>).new(<span class="string">"bar"</span>).to_h   <span class="comment">#=&gt; &#123;:foo=&gt;"bar"&#125;</span></div><div class="line"><span class="keyword">require</span> <span class="string">"ostruct"</span></div><div class="line">open = OpenStruct.new</div><div class="line">open.foo = <span class="string">"bar"</span></div><div class="line">open.to_h                          <span class="comment">#=&gt; &#123;:foo=&gt;"bar"&#125;</span></div></pre></td></tr></table></figure>
+<p>和 <code>Array()</code> 一样，也有一个 <code>Hash()</code> 方法，内部委托给了 <code>#to_h</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hash(&#123;<span class="symbol">:foo</span> =&gt; <span class="string">"bar"</span>&#125;)              <span class="comment">#=&gt; &#123;:foo=&gt;"bar"&#125;</span></div><div class="line">Hash(<span class="literal">nil</span>)                          <span class="comment">#=&gt; &#123;&#125;</span></div></pre></td></tr></table></figure>
+<h2 id="Array-bsearch-和-Range-bsearch"><a href="#Array-bsearch-和-Range-bsearch" class="headerlink" title="Array#bsearch 和 Range#bsearch"></a><code>Array#bsearch</code> 和 <code>Range#bsearch</code></h2><p>Array 和 Range 添加了二分查找方法 <code>#bsearch</code>。它有两种运行模式：查找最小值和查找任意值。两种方式都接收一个 block，数组必须相对该 block 是有序的。</p>
+<p>查找最小值模式会返回第一个大于或等于指定值的元素。使用该模式时，你只要让 block 在元素大于或等于指定值时返回 true，反之返回 false。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">array = [<span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">16</span>, <span class="number">32</span>]</div><div class="line">array.bsearch &#123;<span class="params">|x|</span> x &gt;= <span class="number">4</span>&#125;       <span class="comment">#=&gt; 4</span></div><div class="line">array.bsearch &#123;<span class="params">|x|</span> x &gt;= <span class="number">7</span>&#125;       <span class="comment">#=&gt; 8</span></div><div class="line">array.bsearch &#123;<span class="params">|x|</span> x &gt;= <span class="number">9</span>&#125;       <span class="comment">#=&gt; 16</span></div><div class="line">array.bsearch &#123;<span class="params">|x|</span> x &gt;= <span class="number">0</span>&#125;       <span class="comment">#=&gt; 2</span></div><div class="line">array.bsearch &#123;<span class="params">|x|</span> x &gt;= <span class="number">33</span>&#125;      <span class="comment">#=&gt; nil</span></div></pre></td></tr></table></figure>
+<p>查找任意值模式中，提供的 block 在元素比指定值小时返回一个正数，比指定值大时返回一个负数，相等则返回 0。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">array.bsearch &#123;<span class="params">|x|</span> <span class="number">4</span> &lt;=&gt; x&#125;      <span class="comment">#=&gt; 4</span></div><div class="line">array.bsearch &#123;<span class="params">|x|</span> <span class="number">7</span> &lt;=&gt; x&#125;      <span class="comment">#=&gt; nil</span></div></pre></td></tr></table></figure>
+<p>你的 block 可以让不止一个值返回 0，这种情况下，这些值中的任意一个都可能被选中。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">array = [<span class="number">0</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">12</span>]</div><div class="line">array.map &#123;<span class="params">|x|</span> <span class="number">1</span> - x / <span class="number">4</span> &#125;       <span class="comment">#=&gt; [1, 0, 0, -1, -2]</span></div><div class="line">array.bsearch &#123;<span class="params">|x|</span> <span class="number">1</span> - x / <span class="number">4</span> &#125;   <span class="comment">#=&gt; 4 or 7</span></div></pre></td></tr></table></figure>
+<h2 id="Enumerable-lazy"><a href="#Enumerable-lazy" class="headerlink" title="Enumerable#lazy"></a><code>Enumerable#lazy</code></h2><p>任意 <code>Enumerable</code>（<code>Array</code>、<code>Hash</code>、<code>File</code>、<code>Range</code> 等）调用 <code>#lazy</code> 后会返回一个惰性枚举（lazy enumerator），它只有在被告之要进行计算时才会进行计算。另外在链式调用时，<br>枚举元素依次被传入调用链，而不是在每一步都评估整个枚举元素。这样的方式在某些场合下能减少计算量。</p>
+<p>你可以这样来处理无穷集合</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].lazy.cycle.map &#123;<span class="params">|x|</span> x * <span class="number">10</span>&#125;.take(<span class="number">5</span>).to_a   <span class="comment">#=&gt; [10, 20, 30, 10, 20]</span></div></pre></td></tr></table></figure>
+<p>或者当你只需要少量数据时，可以避免庞大的资源消耗</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">File.open(__FILE_<span class="number">_</span>).lazy.each.map(&amp;<span class="symbol">:chomp</span>).reject(&amp;<span class="symbol">:empty?</span>).take(<span class="number">3</span>).force</div></pre></td></tr></table></figure>
+<p>上面这个示例中，当找到了3行非空行后就不会再继续读取文件。</p>
+<p><code>#lazy</code> 若使用不当时会引起性能问题，所以要确保用于正确的场合。</p>
+<p>同样可以使用 <code>Enumerator::Lazy</code> 类来创建惰性枚举。上述示例也可以写成</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">populated_lines</span><span class="params">(file, &amp;block)</span></span></div><div class="line">  Enumerator::Lazy.new(file) <span class="keyword">do</span> <span class="params">|yielder, line|</span></div><div class="line">    string = line.chomp</div><div class="line">    yielder &lt;&lt; string <span class="keyword">unless</span> string.empty?</div><div class="line">  <span class="keyword">end</span>.each(&amp;block) <span class="comment"># evals block, or returns enum if nil, like stdlib</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">populated_lines(File.open(__FILE_<span class="number">_</span>)).take(<span class="number">3</span>).force</div></pre></td></tr></table></figure>
+<h2 id="惰性的-Enumerator-size-和-Range-size"><a href="#惰性的-Enumerator-size-和-Range-size" class="headerlink" title="惰性的 Enumerator#size 和 Range#size"></a>惰性的 <code>Enumerator#size</code> 和 <code>Range#size</code></h2><p>现在，<code>Enumerator#size</code> 无需循环评估整个枚举就能返回集合的容量，Range 也一样。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</div><div class="line">array.cycle(<span class="number">4</span>).size    <span class="comment">#=&gt; 16</span></div><div class="line">array.cycle.size       <span class="comment">#=&gt; Infinity</span></div><div class="line"><span class="comment"># 如果无法计算容量则返回 nil</span></div><div class="line">array.find.size        <span class="comment">#=&gt; nil</span></div><div class="line"><span class="comment"># Range too</span></div><div class="line">(<span class="number">1</span>..<span class="number">10</span>).size           <span class="comment">#=&gt; 10</span></div></pre></td></tr></table></figure>
+<p>为了使自己代码返回的 <code>Enumerators</code> 也能享受到这个特性，现在，<code>Enumerator.new</code> 可以接收一个参数，该参数就用于计算 size。</p>
+<p>参数可以是一个值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">enum = Enumerator.new(<span class="number">3</span>) <span class="keyword">do</span> <span class="params">|yielder|</span></div><div class="line">  yielder &lt;&lt; <span class="string">"a"</span></div><div class="line">  yielder &lt;&lt; <span class="string">"b"</span></div><div class="line">  yielder &lt;&lt; <span class="string">"c"</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">enum.size              <span class="comment">#=&gt; 3</span></div></pre></td></tr></table></figure>
+<p>也可以是一个能调用 <code>#call</code> 方法的对象</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">square_times</span><span class="params">(num, &amp;block)</span></span></div><div class="line">  Enumerator.new(-&gt; &#123;num ** <span class="number">2</span>&#125;) <span class="keyword">do</span> <span class="params">|yielder|</span></div><div class="line">    (num ** <span class="number">2</span>).times &#123;<span class="params">|i|</span> yielder &lt;&lt; i&#125;</div><div class="line">  <span class="keyword">end</span>.each(&amp;block)</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">square_times(<span class="number">6</span>).size     <span class="comment">#=&gt; 36</span></div></pre></td></tr></table></figure>
+<p>现在，<code>#to_enum</code> （以及其别名方法 <code>#enum_for</code>）同样可以接收一个 block 来计算容量，上述代码也可以写成下面这样</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">square_times</span><span class="params">(num)</span></span></div><div class="line">  <span class="keyword">return</span> to_enum(<span class="symbol">:square_times</span>) &#123;num ** <span class="number">2</span>&#125; <span class="keyword">unless</span> block_given?</div><div class="line">  (num ** <span class="number">2</span>).times <span class="keyword">do</span> <span class="params">|i|</span></div><div class="line">    <span class="keyword">yield</span> i</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">square_times(<span class="number">6</span>).size     <span class="comment">#=&gt; 36</span></div></pre></td></tr></table></figure>
+<h2 id="Rubygems-支持-Gemfile"><a href="#Rubygems-支持-Gemfile" class="headerlink" title="Rubygems 支持 Gemfile"></a>Rubygems 支持 Gemfile</h2><p>现在，Rubygems 支持使用 Gemfile （或 Isolate， 或 gems.deps.rb）来安装 gems 以及加载激活信息。</p>
+<p>指定 <code>-- file</code> （或 <code>-g</code>）选项，就可以安装 Gemfile 中列出的 gems （以及依赖关系）了。该操作仅使用 Gemfile，而不是 Gemfile.lock，因此版本以 Gemfile 中指定的为准。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gem install --file Gemfile</div></pre></td></tr></table></figure>
+<p>加载激活信息（即使用 gems 的哪个版本），需要指定 <code>RUBYGEMS_GEMDEPS</code> 环境变量，它的值应该是 Gemfile 的路径，不过你也可以使用 <code>-</code> 来让 Rubygems 自动检测。</p>
+<p>和安装一样，这步操作也使用 Gemfile，而不是 Gemfile.lock，所以比起 Bundler 来说要更为宽松。并且，它只是将指定的版本激活，你仍然需要在代码中 require 这些 gems。</p>
+<p>内置了这个特性确实带来了好处，我们不再需要使用 <code>bundle exec</code> 或 Bundlers binstub 这类东西了，而只需像往常一样启动应用程序。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export RUBYGEMS_GEMDEPS=-</div><div class="line"><span class="comment"># 启动你的应用程序</span></div></pre></td></tr></table></figure>
+<p>该特性仅支持基本的 Gemfile 格式，比如它不支持声明 <code>gemspec</code>，然而它确实方便，且有望继续进化而变得更加强大，并且当 Bundler 不管用时，该特性就非常有用了。</p>
+<p><code>bundle install --path vendor/bundle</code> 可以粗略近似为</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gem install --file Gemfile --install-dir vendor/gem</div><div class="line"></div><div class="line">export GEM_HOME=vendor/gem</div><div class="line">export RUBYGEMS_GEMDEPS=-</div><div class="line"><span class="comment"># 启动你的应用程序</span></div></pre></td></tr></table></figure>
+<h2 id="RDoc-支持-Markdown-格式"><a href="#RDoc-支持-Markdown-格式" class="headerlink" title="RDoc 支持 Markdown 格式"></a>RDoc 支持 Markdown 格式</h2><p>RDoc 现在支持 markdown 了，可以使用 markup 选项来设置 rdoc 的格式。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rdoc --markup markdown</div></pre></td></tr></table></figure>
+<p>该设置可以保存到你项目下的 <code>.doc_options</code> 文件中，这样就不用每次都重复上面的步骤了</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rdoc --markup markdown --write-options</div></pre></td></tr></table></figure>
+<h2 id="像-puts-一样使用-warn"><a href="#像-puts-一样使用-warn" class="headerlink" title="像 puts 一样使用 warn"></a>像 puts 一样使用 warn</h2><p>现在 warn 的用法和 puts 一样了，可以接收多个参数，或者一个数组，然后将其打印出来，只不过输出到 stderr 中，而不是 stdout。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">warn <span class="string">"foo"</span>, <span class="string">"bar"</span></div><div class="line">warn [<span class="string">"foo"</span>, <span class="string">"bar"</span>]</div></pre></td></tr></table></figure>
+<h2 id="Logger-兼容-syslog-接口"><a href="#Logger-兼容-syslog-接口" class="headerlink" title="Logger 兼容 syslog 接口"></a>Logger 兼容 syslog 接口</h2><p>现在，将日志记录的场所在文件和 syslog 之间相互切换变得易如反掌，不再是二选一以后就不能改变了。你甚至可以在开发过程中将日志记录到 stdout 中，而在 production 环境下记录到 syslog，而无需修改所有调用日志操作的代码。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ENV[<span class="string">"RACK_ENV"</span>] == <span class="string">"production"</span></div><div class="line">  <span class="keyword">require</span> <span class="string">"syslog"</span></div><div class="line">  logger = Syslog::Logger.new(<span class="string">"my_app"</span>)</div><div class="line"><span class="keyword">else</span></div><div class="line">  <span class="keyword">require</span> <span class="string">"logger"</span></div><div class="line">  logger = Logger.new(STDOUT)</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">logger.debug(<span class="string">"about to do stuff"</span>)</div><div class="line"><span class="keyword">begin</span></div><div class="line">  do_stuff</div><div class="line"><span class="keyword">rescue</span> =&gt; e</div><div class="line">  logger.error(e.message)</div><div class="line"><span class="keyword">end</span></div><div class="line">logger.info(<span class="string">"stuff done"</span>)</div></pre></td></tr></table></figure>
+<h2 id="TracePoint"><a href="#TracePoint" class="headerlink" title="TracePoint"></a>TracePoint</h2><p><code>TracePoint</code> 是既有的 <code>Kernel#set_trace_func</code> 的面向对象版本。它能让你追踪 Ruby 代码的执行流程，这在调试逻辑混乱的代码的时候非常有用。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># set up our tracer, but don't enable it yet</span></div><div class="line">events = %i&#123;call <span class="keyword">return</span> b_call b_return raise&#125;</div><div class="line">trace = TracePoint.new(*events) <span class="keyword">do</span> <span class="params">|tp|</span></div><div class="line">  p [tp.event, tp.event == <span class="symbol">:raise</span> ? tp.raised_exception.<span class="keyword">class</span> : tp.method_id, tp.path, tp.lineno]</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">twice</span></span></div><div class="line">  result = []</div><div class="line">  result &lt;&lt; <span class="keyword">yield</span></div><div class="line">  result &lt;&lt; <span class="keyword">yield</span></div><div class="line">  result</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_idempotence</span><span class="params">(&amp;block)</span></span></div><div class="line">  a, b = twice(&amp;block)</div><div class="line">  raise <span class="string">"expected <span class="subst">#&#123;a&#125;</span> to equal <span class="subst">#&#123;b&#125;</span>"</span> <span class="keyword">unless</span> a == b</div><div class="line">  <span class="literal">true</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">trace.enable</div><div class="line">a = <span class="number">1</span></div><div class="line"><span class="keyword">begin</span></div><div class="line">  check_idempotence &#123;a += <span class="number">1</span>&#125;</div><div class="line"><span class="keyword">rescue</span></div><div class="line"><span class="keyword">end</span></div><div class="line">trace.disable</div></pre></td></tr></table></figure>
+<p>输出为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[:call, :check_idempotence, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 841]</div><div class="line">[:call, :twice, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 834]</div><div class="line">[:b_call, nil, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 850]</div><div class="line">[:b_return, nil, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 850]</div><div class="line">[:b_call, nil, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 850]</div><div class="line">[:b_return, nil, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 850]</div><div class="line">[:return, :twice, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 839]</div><div class="line">[:raise, #&lt;RuntimeError: expected 2 to equal 3&gt;, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 843]</div><div class="line">[:return, :check_idempotence, &quot;/Users/mat/Dropbox/ruby-2.0.0.rb&quot;, 843]</div></pre></td></tr></table></figure>
+<h2 id="异步线程中断处理"><a href="#异步线程中断处理" class="headerlink" title="异步线程中断处理"></a>异步线程中断处理</h2><p>Ruby 的线程可以被其他线程杀死或在其中抛出异常。这个特性并非绝对安全，因为行刑的线程不知道它要杀死的线程正在做什么，有可能一个线程正在进行一些重要的资源分配操作的途中就被杀死了。现今，我们有了更加安全的特性来处理此类情况。</p>
+<p>举个例子，标准库中的 timeout 库的运行方式是新建一个线程，新线程在等待指定的时间后在原线程中抛一个异常。</p>
+<p>假设我们有一个连接池库，它能够处理将连接放回失败的情况，但如果取出连接或放回连接的线程被中止则会失败。你写了一个方法来取得一个连接并用它发起一个请求然后将其返回，并且你猜测使用该方法的人可能会用 timeout 来对它进行包装。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">request</span><span class="params">(details)</span></span></div><div class="line">  result = <span class="literal">nil</span></div><div class="line">  <span class="comment"># Block will defer given exceptions if they are raised in this thread by</span></div><div class="line">  <span class="comment"># another thread till the end of the block. Exceptions are not rescured or</span></div><div class="line">  <span class="comment"># ignored, but handled later.</span></div><div class="line">  Thread.handle_interrupt(Timeout::ExitException =&gt; <span class="symbol">:never</span>) <span class="keyword">do</span></div><div class="line">    <span class="comment"># no danger of timeout interrupting checkout</span></div><div class="line">    connection = connection_pool.checkout</div><div class="line">    <span class="comment"># if checkout took too long, handle the interrupt immediately, effectively</span></div><div class="line">    <span class="comment"># raising the pending exception here</span></div><div class="line">    <span class="keyword">if</span> Thread.pending_interrupt?</div><div class="line">      Thread.handle_interrupt(Timeout::ExitException =&gt; <span class="symbol">:immediate</span>)</div><div class="line">    <span class="keyword">end</span></div><div class="line">    <span class="comment"># allow interrupts during IO (or C extension call)</span></div><div class="line">    Thread.handle_interrupt(Timeout::ExitException =&gt; <span class="symbol">:on_blocking</span>) <span class="keyword">do</span></div><div class="line">      result = connection.request(details)</div><div class="line">    <span class="keyword">end</span></div><div class="line">    <span class="comment"># no danger of timeout interrupting checkin</span></div><div class="line">    connection_pool.checkin(connection)</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>上面这个方法能够安全地被 timeout 包装，连接始终能够被完全取出，如果完成了请求，连接始终能够被放回。如果在放回的时候发生了 timeout，放回不会被中断，但异常在方法的最后仍然会被抛出。</p>
+<p>虽然这个例子不是很自然，但却很好的涵盖了这个优秀的新特性的要点。</p>
+<h2 id="垃圾回收的改进"><a href="#垃圾回收的改进" class="headerlink" title="垃圾回收的改进"></a>垃圾回收的改进</h2><p>Ruby 2.0 的垃圾回收机制有了一些改进，使得 Ruby 能够更好的进行写入时复制（Copy-on-Write）。这意味着多线程的应用程序，比如运行在 Unicorn 上的 Rails 应用，能够减少内存的使用量。</p>
+<p><code>GC::Profiler</code> 类新增了 <code>::raw_data</code> 方法，该方法以 hash 的数组形式返回原始数据，而不是字符串，这样能够更加便于 statsd 之类的工具来记录数据。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GC::Profiler.enable <span class="comment"># turn on the profiler</span></div><div class="line">GC.start <span class="comment"># force a GC run, so there will be some stats</span></div><div class="line">GC::Profiler.raw_data</div><div class="line"><span class="comment">#=&gt; [&#123;:GC_TIME=&gt;0.0012150000000000008, :GC_INVOKE_TIME=&gt;0.036716,</span></div><div class="line"><span class="comment">#   :HEAP_USE_SIZE=&gt;435920, :HEAP_TOTAL_SIZE=&gt;700040,</span></div><div class="line"><span class="comment">#   :HEAP_TOTAL_OBJECTS=&gt;17501, :GC_IS_MARKED=&gt;0&#125;]</span></div></pre></td></tr></table></figure>
+<h2 id="ObjectSpace-reachable-objects-from"><a href="#ObjectSpace-reachable-objects-from" class="headerlink" title="ObjectSpace.reachable_objects_from"></a><code>ObjectSpace.reachable_objects_from</code></h2><p>该方法返回指定对象的所有可直接到达的对象。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"objspace"</span></div><div class="line"></div><div class="line">Response = Struct.new(<span class="symbol">:code</span>, <span class="symbol">:header</span>, <span class="symbol">:body</span>)</div><div class="line">res = Response.new(<span class="number">200</span>, &#123;<span class="string">"Content-Length"</span> =&gt; <span class="string">"12"</span>&#125;, <span class="string">"Hello world!"</span>)</div><div class="line"></div><div class="line">ObjectSpace.reachable_objects_from(res)</div><div class="line"><span class="comment">#=&gt; [Response, &#123;"Content-Length"=&gt;"12"&#125;, "Hello world!"]</span></div></pre></td></tr></table></figure>
+<p>你可以结合 <code>ObjectSpace.memsize_of</code> 方法来取得一个对象和所有其引用的对象所占的内存容量，这在调试内存泄漏时非常有用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">memsize_of_all_reachable_objects_from</span><span class="params">(obj)</span></span></div><div class="line">  memsize = <span class="number">0</span></div><div class="line">  seen = &#123;&#125;.tap(&amp;<span class="symbol">:compare_by_identity</span>)</div><div class="line">  to_do = [obj]</div><div class="line">  <span class="keyword">while</span> obj = to_do.shift</div><div class="line">    ObjectSpace.reachable_objects_from(obj).each <span class="keyword">do</span> <span class="params">|o|</span></div><div class="line">      <span class="keyword">next</span> <span class="keyword">if</span> seen.key?(o) <span class="params">||</span> Module === o</div><div class="line">      seen[o] = <span class="literal">true</span></div><div class="line">      memsize += ObjectSpace.memsize_of(o)</div><div class="line">      to_do &lt;&lt; o</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line">  memsize</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">memsize_of_all_reachable_objects_from(res)   <span class="comment">#=&gt; 192</span></div></pre></td></tr></table></figure>
+<h2 id="更好的调用栈"><a href="#更好的调用栈" class="headerlink" title="更好的调用栈"></a>更好的调用栈</h2><p>现在，调用栈字符串不再随着每个异常的出现而生成，而是根据需要由轻量的对象集合立即生成。你可以使用 <code>caller_locations</code> 或 <code>Thread#backtrace_locations</code> 来得到这些对象。奇怪的是 <code>Exception</code> 无法调用这两个方法。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span></div><div class="line">  bar</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span></span></div><div class="line">  caller_locations</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">locations = foo</div><div class="line">locations.map(&amp;<span class="symbol">:label</span>)   <span class="comment">#=&gt; ["foo", "&lt;main&gt;"]</span></div><div class="line">locations.first.<span class="keyword">class</span>    <span class="comment">#=&gt; Thread::Backtrace::Location</span></div></pre></td></tr></table></figure>
+<p><code>caller</code> 现在可以接收取得的数量（limit）以及偏差（offset），或者是一个范围（range）</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span></span></div><div class="line">  caller(<span class="number">2</span>, <span class="number">1</span>)</div><div class="line"><span class="keyword">end</span></div><div class="line">foo   <span class="comment">#=&gt; ["/Users/mat/Dropbox/ruby-2.0.0.rb:361:in `&lt;main&gt;'"]</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span></span></div><div class="line">  caller(<span class="number">2</span>..<span class="number">2</span>)</div><div class="line"><span class="keyword">end</span></div><div class="line">foo   <span class="comment">#=&gt; ["/Users/mat/Dropbox/ruby-2.0.0.rb:368:in `&lt;main&gt;'"]</span></div></pre></td></tr></table></figure>
+<h2 id="支持-Zlib-流"><a href="#支持-Zlib-流" class="headerlink" title="支持 Zlib 流"></a>支持 Zlib 流</h2><p>现在可以流式解压 Zilb 了，对 Zlib 的流式压缩的支持也得到了改进。</p>
+<p>解压文件时通常会把压缩文件缓存至内存中，但未压缩的数据可能有数百 MB。<code>Zlib::Inflate#inflate</code> 现在可以接收一个 block，来将未压缩文件分块处理，这样就不需要把未压缩数据一次性全部缓存到内存中了。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"zlib"</span></div><div class="line"></div><div class="line">inflater = Zlib::Inflate.new(Zlib::MAX_WBITS + <span class="number">32</span>)</div><div class="line">File.open(<span class="string">"app.log"</span>, <span class="string">"w"</span>) <span class="keyword">do</span> <span class="params">|out|</span></div><div class="line">  inflater.inflate(File.read(<span class="string">"app.log.gz"</span>)) &#123;<span class="params">|chunk|</span> out &lt;&lt; chunk&#125;</div><div class="line"><span class="keyword">end</span></div><div class="line">inflater.close</div></pre></td></tr></table></figure>
+<p>类似的，<code>Zlib::Deflate#deflate</code> 同样能接收 block，当你不断地往 <code>#deflate</code> 中输送数据的过程中，只有当数据足够进行压缩时，处理才会被执行。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">deflater = Zlib::Deflate.new</div><div class="line">File.open(<span class="string">"app.log.gz"</span>, <span class="string">"w"</span>) <span class="keyword">do</span> <span class="params">|out|</span></div><div class="line">  File.foreach(<span class="string">"app.log"</span>, <span class="number">4</span> * <span class="number">1024</span>) <span class="keyword">do</span> <span class="params">|chunk|</span></div><div class="line">    deflater.deflate(chunk) &#123;<span class="params">|part|</span> out &lt;&lt; part&#125;</div><div class="line">  <span class="keyword">end</span></div><div class="line">  deflater.finish &#123;<span class="params">|part|</span> out &lt;&lt; part&#125;</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h2 id="多线程-Zlib-处理"><a href="#多线程-Zlib-处理" class="headerlink" title="多线程 Zlib 处理"></a>多线程 Zlib 处理</h2><p>Zlib 在处理过程中不再持有全局解释器锁（GIL），因此可以并发处理 gzip、zlib 以及 deflate 流。这也意味着应用程序可以在 Zlib 运行于后台的同时持续响应。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"zlib"</span></div><div class="line"></div><div class="line"><span class="comment"># processes 4 files in parallel, using 4 cores if required</span></div><div class="line">threads = <span class="string">%W&#123;a.txt.gz b.txt.gz c.txt.gz d.txt.gz&#125;</span>.map <span class="keyword">do</span> <span class="params">|path|</span></div><div class="line">  Thread.new <span class="keyword">do</span></div><div class="line">    inflater = Zlib::Inflate.new(Zlib::MAX_WBITS + <span class="number">32</span>)</div><div class="line">    File.open(path.chomp(File.extname(path)), <span class="string">"w"</span>) <span class="keyword">do</span> <span class="params">|out|</span></div><div class="line">      inflater.inflate(File.read(path)) &#123;<span class="params">|chunk|</span> out &lt;&lt; chunk&#125;</div><div class="line">    <span class="keyword">end</span></div><div class="line">    inflater.close</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"><span class="comment"># do other stuff here while Zlib works in other threads</span></div><div class="line">threads.map(&amp;<span class="symbol">:join</span>)</div></pre></td></tr></table></figure>
+<h2 id="编码默认为-UTF-8"><a href="#编码默认为-UTF-8" class="headerlink" title="编码默认为 UTF-8"></a>编码默认为 UTF-8</h2><p>现在不用在第一行写编码注释或者天书般的转义字符，也能够使用 US-ASCII 以外的字符了。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">currency = <span class="string">"€"</span>   <span class="comment">#=&gt; "€"</span></div></pre></td></tr></table></figure>
+<h2 id="取得二进制字符串的方法"><a href="#取得二进制字符串的方法" class="headerlink" title="取得二进制字符串的方法"></a>取得二进制字符串的方法</h2><p><code>String#b</code> 可以方便地取得字符串的 ASCII-8BIT （也就是二进制）版</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">s = <span class="string">"foo"</span></div><div class="line">s.encoding     <span class="comment">#=&gt; #&lt;Encoding:UTF-8&gt;</span></div><div class="line">s.b.encoding   <span class="comment">#=&gt; #&lt;Encoding:ASCII-8BIT&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="String-lines、-chars-等方法返回数组"><a href="#String-lines、-chars-等方法返回数组" class="headerlink" title="String#lines、#chars 等方法返回数组"></a><code>String#lines</code>、<code>#chars</code> 等方法返回数组</h2><p><code>lines</code>、<code>chars</code>、<code>codepoints</code>、<code>bytes</code> 方法不再返回 Enumerator ，而返回数组</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">s = <span class="string">"foo\nbar"</span></div><div class="line">s.lines        <span class="comment">#=&gt; ["foo\n", "bar"]</span></div><div class="line">s.chars        <span class="comment">#=&gt; ["f", "o", "o", "\n", "b", "a", "r"]</span></div><div class="line">s.codepoints   <span class="comment">#=&gt; [102, 111, 111, 10, 98, 97, 114]</span></div><div class="line">s.bytes        <span class="comment">#=&gt; [102, 111, 111, 10, 98, 97, 114]</span></div></pre></td></tr></table></figure>
+<p>为了保持向下兼容性，这些方法仍然能够接收一个 block，但现在开始，这种情况你应该改用 <code>#each_line</code> 等方法。</p>
+<p>在 <code>IO</code>、<code>ARGF</code>、<code>StirngIO</code> 和 <code>Zlib::GzipReader</code> 中的类似方法仍然返回 Enumerator，但这些方法已经被废弃，请使用 <code>each_*</code> 形式的版本。</p>
+<h2 id="dir"><a href="#dir" class="headerlink" title="__dir__"></a><code>__dir__</code></h2><p>类似 <code>__File__</code>，<code>__dir__</code> 返回文件的路径，但不包括文件名，在下列情况下很有用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">YAML.load_file(File.join(__dir_<span class="number">_</span>, <span class="string">"config.yml"</span>))</div></pre></td></tr></table></figure>
+<h2 id="callee-返回调用它的方法名"><a href="#callee-返回调用它的方法名" class="headerlink" title="__callee__ 返回调用它的方法名"></a><code>__callee__</code> 返回调用它的方法名</h2><p><code>__callee__</code> 的返回值又回到了调用它的方法名，而不是定义别名方法了。这很有用。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">do_request</span><span class="params">(method, path, headers=&#123;&#125;, body=<span class="literal">nil</span>)</span></span></div><div class="line">  <span class="string">"<span class="subst">#&#123;method.upcase&#125;</span> <span class="subst">#&#123;path&#125;</span>"</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(path, headers=&#123;&#125;)</span></span></div><div class="line">  do_request(__callee_<span class="number">_</span>, path, headers)</div><div class="line"><span class="keyword">end</span></div><div class="line"><span class="keyword">alias</span> head get</div><div class="line"></div><div class="line">get(<span class="string">"/test"</span>)    <span class="comment">#=&gt; "GET /test"</span></div><div class="line">head(<span class="string">"/test"</span>)   <span class="comment">#=&gt; "HEAD /test"</span></div></pre></td></tr></table></figure>
+<h2 id="正则表达式引擎换成了-Onigmo"><a href="#正则表达式引擎换成了-Onigmo" class="headerlink" title="正则表达式引擎换成了 Onigmo"></a>正则表达式引擎换成了 Onigmo</h2><p>1.9 的正则表达式引擎是 Oniguruma，Onigmo 是它的一个分支，新增了<a href="https://github.com/k-takata/Onigmo" target="_blank" rel="external">一些特性</a>。新特性似乎是受了 Perl 的影响，可以参考<a href="http://perldoc.perl.org/perlre.html" target="_blank" rel="external">这里</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(?(cond)yes|no)</div></pre></td></tr></table></figure>
+<p>如果满足 cond 条件，则使用 yes 条件匹配，反之使用 no 条件匹配。cond 是 group number 或 name 的引用，或者是向前或向后匹配</p>
+<p>下面的表达式匹配的是开头字母和结尾字母的大小写相同的字符串</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">regexp = <span class="regexp">/^([A-Z])?[a-z]+(?(1)[A-Z]|[a-z])$/</span></div><div class="line"></div><div class="line">regexp =~ <span class="string">"foo"</span>   <span class="comment">#=&gt; 0</span></div><div class="line">regexp =~ <span class="string">"foO"</span>   <span class="comment">#=&gt; nil</span></div><div class="line">regexp =~ <span class="string">"FoO"</span>   <span class="comment">#=&gt; 0</span></div></pre></td></tr></table></figure>
+<h2 id="Hash-default-proc-现在可接收-nil"><a href="#Hash-default-proc-现在可接收-nil" class="headerlink" title="Hash#default_proc= 现在可接收 nil"></a><code>Hash#default_proc=</code> 现在可接收 nil</h2><p>这样就不再需要用 <code>hash.default = nil</code> 来清空 <code>hash.default_proc:</code> 了，现在新的代码更符合直觉。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">hash = &#123;&#125;</div><div class="line">hash.default_proc = Proc.new &#123;<span class="params">|h,k|</span> h[k] = []&#125;</div><div class="line">hash[<span class="symbol">:foo</span>] &lt;&lt; <span class="string">"bar"</span></div><div class="line">hash[<span class="symbol">:foo</span>]                                       <span class="comment">#=&gt; ["bar"]</span></div><div class="line">hash.default_proc = <span class="literal">nil</span></div><div class="line">hash[<span class="symbol">:baz</span>]                                       <span class="comment">#=&gt; nil</span></div></pre></td></tr></table></figure>
+<h2 id="Array-values-at-对每个越界的值都返回一个-nil"><a href="#Array-values-at-对每个越界的值都返回一个-nil" class="headerlink" title="Array#values_at 对每个越界的值都返回一个 nil"></a><code>Array#values_at</code> 对每个越界的值都返回一个 nil</h2><p>以前当 <code>#values_at</code> 方法的参数是 range 时，对所有越界的 index 只返回一个 nil，现在改为对每个越界的 index 各返回一个 nil</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>].values_at(<span class="number">3</span>..<span class="number">7</span>)   <span class="comment">#=&gt; [8, 10, nil, nil, nil]</span></div></pre></td></tr></table></figure>
+<h2 id="File-fnmatch-可以通过选项来展开括号"><a href="#File-fnmatch-可以通过选项来展开括号" class="headerlink" title="File.fnmatch? 可以通过选项来展开括号"></a><code>File.fnmatch?</code> 可以通过选项来展开括号</h2><p>如果出于一些原因你需要在 Ruby 中进行 shell 风格的文件名匹配，好消息是现在你可以使用 {foo, bar} 这样的模式了。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 3rd argument enables the brace expansion</span></div><div class="line">File.fnmatch?(<span class="string">"&#123;foo,bar&#125;"</span>, <span class="string">"foo"</span>, File::FNM_EXTGLOB)   <span class="comment">#=&gt; true</span></div><div class="line">File.fnmatch?(<span class="string">"&#123;foo,bar&#125;"</span>, <span class="string">"foo"</span>)                      <span class="comment">#=&gt; false</span></div><div class="line"><span class="comment"># or together multiple options old-school C style</span></div><div class="line">casefold_extglob = File::FNM_CASEFOLD <span class="params">| File::FNM_EXTGLOB</span></div><div class="line"><span class="params">File.fnmatch?("&#123;foo,bar&#125;", "BAR", casefold_extglob)    #=&gt; <span class="literal">true</span></span></div></pre></td></tr></table></figure>
+<h2 id="Shellwords-对参数调用-to-s"><a href="#Shellwords-对参数调用-to-s" class="headerlink" title="Shellwords 对参数调用 #to_s"></a><code>Shellwords</code> 对参数调用 <code>#to_s</code></h2><p><code>Shellwords#shellscape</code> 和 <code>#shelljoin</code> 现在会对参数调用 <code>#to_s</code>，和 <code>Pathname</code> 一起使用时会特别有用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"pathname"</span></div><div class="line"><span class="keyword">require</span> <span class="string">"shellwords"</span></div><div class="line"></div><div class="line">path = Pathname.new(<span class="string">"~/Library/Application Support/"</span>).expand_path</div><div class="line">Shellwords.shellescape(path)</div><div class="line">\<span class="comment">#=&gt; "/Users/mat/Library/Application\\ Support"</span></div><div class="line"></div><div class="line">Shellwords.join(Pathname.glob(<span class="string">"/Applications/A*"</span>))</div><div class="line">\<span class="comment">#=&gt; "/Applications/App\\ Store.app /Applications/Automator.app"</span></div></pre></td></tr></table></figure>
+<h2 id="system-和-exec-现在默认关闭非标准的文件描述符"><a href="#system-和-exec-现在默认关闭非标准的文件描述符" class="headerlink" title="system 和 exec 现在默认关闭非标准的文件描述符"></a><code>system</code> 和 <code>exec</code> 现在默认关闭非标准的文件描述符</h2><p>使用 <code>exec</code> 时，除了 <code>STDIN</code>、<code>STDOUT</code> 和 <code>STDERR</code> 外所有打开的文件和套接字在新的进程中都会被关闭。以前可以通过指定选项（<code>cmd</code>, <code>close_others: true</code>）来做到，现在成了默认行为</p>
+<h2 id="respond-to-对待-protected-方法同于-private-方法"><a href="#respond-to-对待-protected-方法同于-private-方法" class="headerlink" title="#respond_to? 对待 protected 方法同于 private 方法"></a><code>#respond_to?</code> 对待 protected 方法同于 private 方法</h2><p>和 <code>private</code> 方法一样，protected 方法不再被 <code>#respond_to?</code> 可见，除非第二个参数是 <code>true</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  protected</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">bar</span></span></div><div class="line">    <span class="string">"baz"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">f = Foo.new</div><div class="line">f.respond_to?(<span class="symbol">:bar</span>)         <span class="comment">#=&gt; false</span></div><div class="line">f.respond_to?(<span class="symbol">:bar</span>, <span class="literal">true</span>)   <span class="comment">#=&gt; true</span></div></pre></td></tr></table></figure>
+<h2 id="inspect-不再调用-to-s"><a href="#inspect-不再调用-to-s" class="headerlink" title="#inspect 不再调用 #to_s"></a><code>#inspect</code> 不再调用 <code>#to_s</code></h2><p>在 Ruby 1.9 以前，如果自定义了 <code>#to_s</code> 方法，<code>#inspect</code> 会被委托给这个 <code>#to_s</code> 方法，现在这个行为已经被去除了</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">to_s</span></span></div><div class="line">    <span class="string">"foo"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Foo.new.inspect   <span class="comment">#=&gt; "#&lt;Foo:0x007fb4a2887328&gt;"</span></div></pre></td></tr></table></figure>
+<h2 id="LoadError-path"><a href="#LoadError-path" class="headerlink" title="LoadError#path"></a><code>LoadError#path</code></h2><p><code>LoadError</code> 现在有了 <code>#path</code> 方法来获取无法加载文件的路径。虽然在错误消息里面也有，但现在能在代码中更方便地取得了</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">begin</span></div><div class="line">  require_relative <span class="string">"foo"</span></div><div class="line"><span class="keyword">rescue</span> LoadError =&gt; e</div><div class="line">  e.message   <span class="comment">#=&gt; "cannot load such file -- /Users/mat/Dropbox/foo"</span></div><div class="line">  e.path      <span class="comment">#=&gt; "/Users/mat/Dropbox/foo"</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h2 id="Process-getsid"><a href="#Process-getsid" class="headerlink" title="Process.getsid"></a><code>Process.getsid</code></h2><p><code>getsid</code> 返回该进程的会话 ID。仅用于 unix/linux 操作系统</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Process.getsid   <span class="comment">#=&gt; 240</span></div></pre></td></tr></table></figure>
+<h2 id="Signal-signame"><a href="#Signal-signame" class="headerlink" title="Signal.signame"></a><code>Signal.signame</code></h2><p><code>signame</code> 用于获取指定号码的信号名</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Signal.signame(<span class="number">9</span>)   <span class="comment">#=&gt; "KILL"</span></div></pre></td></tr></table></figure>
+<h2 id="捕捉内部信号会报错"><a href="#捕捉内部信号会报错" class="headerlink" title="捕捉内部信号会报错"></a>捕捉内部信号会报错</h2><p>如果使用 <code>Signal.trap</code> 捕捉 <code>:SEGV</code>、<code>:BUS</code>、<code>:ILL</code>、<code>:FPE</code> 或 <code>:VTALRM</code> 时会抛出 <code>ArgumentError</code>，这些信号是 Ruby 内部使用的，因此你无法捕捉它们。</p>
+<h2 id="真正的线程局部变量"><a href="#真正的线程局部变量" class="headerlink" title="真正的线程局部变量"></a>真正的线程局部变量</h2><p>在 Ruby 1.9 中，<code>Thread#[]</code>、<code>#[]=</code>、<code>#keys</code> 和 <code>#key?</code> 用来对纤程的局部变量进行取值和设值，<code>Thread</code> 现在有了等价的 <code>#thread_variable_get</code>、<code>#thread_variable_set</code>、<code>#thread_variables</code> 和 <code>#thread_variable？</code> 方法，用来处理线程的局部变量</p>
+<p>纤程局部变量</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">b = <span class="literal">nil</span></div><div class="line"></div><div class="line">a = Fiber.new <span class="keyword">do</span></div><div class="line">  Thread.current[<span class="symbol">:foo</span>] = <span class="number">1</span></div><div class="line">  b.transfer</div><div class="line">  Thread.current[<span class="symbol">:foo</span>]</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">b = Fiber.new <span class="keyword">do</span></div><div class="line">  Thread.current[<span class="symbol">:foo</span>] = <span class="number">2</span></div><div class="line">  a.transfer</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">p a.resume   <span class="comment">#=&gt; 1</span></div></pre></td></tr></table></figure>
+<p>线程局部变量</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">b = <span class="literal">nil</span></div><div class="line"></div><div class="line">a = Fiber.new <span class="keyword">do</span></div><div class="line">  Thread.current.thread_variable_set(<span class="symbol">:foo</span>, <span class="number">1</span>)</div><div class="line">  b.transfer</div><div class="line">  Thread.current.thread_variable_get(<span class="symbol">:foo</span>)</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">b = Fiber.new <span class="keyword">do</span></div><div class="line">  Thread.current.thread_variable_set(<span class="symbol">:foo</span>, <span class="number">2</span>)</div><div class="line">  a.transfer</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">p a.resume   <span class="comment">#=&gt; 2</span></div></pre></td></tr></table></figure>
+<h2 id="改善加入当前线程-主线程时的错误消息"><a href="#改善加入当前线程-主线程时的错误消息" class="headerlink" title="改善加入当前线程/主线程时的错误消息"></a>改善加入当前线程/主线程时的错误消息</h2><p>如果你试图对当前线程或主线程调用 <code>#join</code> 或 <code>#value</code> 方法，你会得到一个继承自 <code>StandardError</code> 的 <code>ThreadError</code>，而不是继承自 <code>Exception</code> 的 fatal。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">begin</span></div><div class="line">  Thread.current.join</div><div class="line"><span class="keyword">rescue</span> =&gt; e</div><div class="line">  e   <span class="comment">#=&gt; #&lt;ThreadError: Target thread must not be current thread&gt;</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h2 id="关于互斥锁的改动"><a href="#关于互斥锁的改动" class="headerlink" title="关于互斥锁的改动"></a>关于互斥锁的改动</h2><p>我想不出一个有趣的实例来解释，但是你现在可以检查当前线程是否持有互斥锁了</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"thread"</span></div><div class="line"></div><div class="line">lock = Mutex.new</div><div class="line">lock.lock</div><div class="line">lock.owned?                      <span class="comment">#=&gt; true</span></div><div class="line">Thread.new &#123;lock.owned?&#125;.value   <span class="comment">#=&gt; false</span></div></pre></td></tr></table></figure>
+<p>同样影响互斥锁的是，以下这些改变互斥锁状态的方法不再允许被用于信号处理： <code>#lock</code>、<code>#unlock</code>、<code>#try_lock</code>、<code>#synchronize</code> 和 <code>#sleep</code>。</p>
+<p>另外，<code>#sleep</code> 可能会提前醒来，因此如果你对时间有精确的要求，你需要再次确认睡眠时间是否准确。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sleep_time = <span class="number">0</span>.<span class="number">1</span></div><div class="line">start = Time.now</div><div class="line">lock.sleep(sleep_time)</div><div class="line">elapsed = Time.now - start</div><div class="line">lock.sleep(sleep_time - elapsed) <span class="keyword">if</span> elapsed &lt; sleep_time</div></pre></td></tr></table></figure>
+<h2 id="自定义线程和纤程的栈大小"><a href="#自定义线程和纤程的栈大小" class="headerlink" title="自定义线程和纤程的栈大小"></a>自定义线程和纤程的栈大小</h2><p>以下环境变量可以用来设置线程和纤程的栈容量。Ruby 只会在程序启动的时候检查它们。</p>
+<ul>
+<li><code>RUBY_THREAD_VM_STACK_SIZE</code>： 用于创建线程的虚拟机栈容量。 默认值： 128KB (32位 CPU) 或 256KB (64位 CPU)。</li>
+<li><code>RUBY_THREAD_MACHINE_STACK_SIZE</code>： 用于创建线程的机器栈容量。 默认值： 512KB 或 1024KB。</li>
+<li><code>RUBY_FIBER_VM_STACK_SIZE</code>： 用于创建纤程的虚拟机栈容量。 默认值： 64KB 或 128KB。</li>
+<li><code>RUBY_FIBER_MACHINE_STACK_SIZE</code>： 用于创建纤程的机器栈容量。 默认值： 256KB 或 256KB。</li>
+</ul>
+<p>你可以这样来取得默认值：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RubyVM::DEFAULT_PARAMS   <span class="comment">#=&gt; &#123;:thread_vm_stack_size=&gt;1048576,</span></div><div class="line">                              <span class="symbol">:thread_machine_stack_size=&gt;</span><span class="number">1048576</span>,</div><div class="line">                              <span class="symbol">:fiber_vm_stack_size=&gt;</span><span class="number">131072</span>,</div><div class="line">                              <span class="symbol">:fiber_machine_stack_size=&gt;</span><span class="number">524288</span>&#125;</div></pre></td></tr></table></figure>
+<h2 id="更严格的-Fiber-transfer"><a href="#更严格的-Fiber-transfer" class="headerlink" title="更严格的 Fiber#transfer"></a>更严格的 <code>Fiber#transfer</code></h2><p>转移出去的线程必须被转移回来，用 <code>resume</code> 来作弊的日子一去不复返了</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"fiber"</span></div><div class="line"></div><div class="line">f2 = <span class="literal">nil</span></div><div class="line"></div><div class="line">f1 = Fiber.new <span class="keyword">do</span></div><div class="line">  puts <span class="string">"a"</span></div><div class="line">  f2.transfer</div><div class="line">  puts <span class="string">"c"</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">f2 = Fiber.new <span class="keyword">do</span></div><div class="line">  puts <span class="string">"b"</span></div><div class="line">  f1.transfer <span class="comment"># under 1.9 this could have been a #resume</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">f1.resume</div></pre></td></tr></table></figure>
+<h2 id="RubyVM-InstructionSequence"><a href="#RubyVM-InstructionSequence" class="headerlink" title="RubyVM::InstructionSequence"></a><code>RubyVM::InstructionSequence</code></h2><p><code>RubyVM::InstructionSequence</code> 不是新添加的，然而现在有了一些新的特性，使其变得更有用了，<a href="http://www.ruby-doc.org/core-2.0/RubyVM/InstructionSequence.html" target="_blank" rel="external">具体文档在此</a>。</p>
+<p>你可以使用既有的方法取得指令序列</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span></span></div><div class="line">    x + y</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">instructions = RubyVM::InstructionSequence.of(Foo.instance_method(<span class="symbol">:add</span>))</div></pre></td></tr></table></figure>
+<p>得到指令序列后，你还可以查看详细信息，比如它是在哪里被定义的</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">instructions.path            <span class="comment">#=&gt; "/Users/mat/Dropbox/ruby-2.0.0.rb"</span></div><div class="line">instructions.absolute_path   <span class="comment">#=&gt; "/Users/mat/Dropbox/ruby-2.0.0.rb"</span></div><div class="line">instructions.label           <span class="comment">#=&gt; "add"</span></div><div class="line">instructions.base_label      <span class="comment">#=&gt; "add"</span></div><div class="line">instructions.first_lineno    <span class="comment">#=&gt; 654</span></div></pre></td></tr></table></figure>
+<h2 id="ObjectSpace-WeakMap"><a href="#ObjectSpace-WeakMap" class="headerlink" title="ObjectSpace::WeakMap"></a><code>ObjectSpace::WeakMap</code></h2><p>这个类是用于实现 <code>WeakRef</code> 的一部分，因此你最好使用 <code>WeakRef</code>（<code>require &quot;weakref&quot;</code>）。该类对存储的对象持有弱关联，意味着它们或许会成为垃圾回收的对象。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">map = ObjectSpace::WeakMap.new</div><div class="line"><span class="comment"># keys can't be immediate values (numbers, symbols), and you must use the</span></div><div class="line"><span class="comment"># exact same object, not just one that is equal.</span></div><div class="line">key = Object.new</div><div class="line"></div><div class="line">map[key] = <span class="string">"foo"</span></div><div class="line">map[key]                <span class="comment">#=&gt; "foo"</span></div><div class="line"><span class="comment"># force a garbage collection run</span></div><div class="line">sleep(<span class="number">0</span>.<span class="number">1</span>) <span class="keyword">and</span> GC.start </div><div class="line">map[key]                <span class="comment">#=&gt; nil</span></div></pre></td></tr></table></figure>
+<h2 id="顶层的-define-method"><a href="#顶层的-define-method" class="headerlink" title="顶层的 define_method"></a>顶层的 <code>define_method</code></h2><p><code>define_method</code> 可以在顶层使用了，而不一定非要在类或模块中</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Dir[<span class="string">"config/*.yml"</span>].each <span class="keyword">do</span> <span class="params">|path|</span></div><div class="line">  %r&#123;config/(?&lt;name&gt;.*)\.yml\z&#125; =~ path</div><div class="line">  define_method(<span class="symbol">:<span class="string">"<span class="subst">#&#123;name&#125;</span>_config"</span></span>) &#123;YAML.load_file(path)&#125;</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h2 id="以下划线开头的变量在没被使用时不会发生警告"><a href="#以下划线开头的变量在没被使用时不会发生警告" class="headerlink" title="以下划线开头的变量在没被使用时不会发生警告"></a>以下划线开头的变量在没被使用时不会发生警告</h2><p>以下方法会发生警告，因为 <code>family</code>、<code>port</code> 和 <code>host</code> 变量没被用到。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_ip</span><span class="params">(sock)</span></span></div><div class="line">  family, port, host, address = sock.peeraddr</div><div class="line">  address</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>在以前版本中，虽说改用下划线可以抑制警告，但这样就降低了代码的可读性</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_ip</span><span class="params">(sock)</span></span></div><div class="line">  <span class="number">_</span>, <span class="number">_</span>, <span class="number">_</span>, address = sock.peeraddr</div><div class="line">  address</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>到了 Ruby 2.0 ，我们可以做到两全其美，只要在变量名前加上 <code>_</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_ip</span><span class="params">(sock)</span></span></div><div class="line">  _family, _port, _host, address = sock.peeraddr</div><div class="line">  address</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h2 id="Proc-和-Proc-eql-方法被删除"><a href="#Proc-和-Proc-eql-方法被删除" class="headerlink" title="Proc#== 和 Proc#eql? 方法被删除"></a><code>Proc#==</code> 和 <code>Proc#eql?</code> 方法被删除</h2><p>在 Ruby 1.9.3 以前，有内容相同以及绑定相同的 <code>Proc</code> 被视为是相等的，但实际上你只可能通过 <code>clone</code> 来得到相等的 <code>Proc</code>。该比较操作现在被删除了，因为实在没什么用处。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">proc = Proc.new &#123;puts <span class="string">"foo"</span>&#125;</div><div class="line"></div><div class="line">proc == proc.clone   <span class="comment">#=&gt; false</span></div></pre></td></tr></table></figure>
+<h2 id="ARGF-each-codepoint"><a href="#ARGF-each-codepoint" class="headerlink" title="ARGF#each_codepoint"></a><code>ARGF#each_codepoint</code></h2><p><code>ARGF</code> 现在有了类似 <code>IO</code> 的 <code>#each_codepoint</code> 方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">count = <span class="number">0</span></div><div class="line">ARGF.each_codepoint &#123;<span class="params">|c|</span> count += <span class="number">1</span> <span class="keyword">if</span> c &gt; <span class="number">127</span>&#125;</div><div class="line">puts <span class="string">"there are <span class="subst">#&#123;count&#125;</span> non-ascii chacters in the given files"</span></div></pre></td></tr></table></figure>
+<h2 id="Time-to-s"><a href="#Time-to-s" class="headerlink" title="Time#to_s"></a><code>Time#to_s</code></h2><p><code>Time#to_s</code> 返回的字符串的编码由 ASCII-8BIT（二进制） 变为了 US-ASCII</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Time.now.to_s.encoding   <span class="comment">#=&gt; #&lt;Encoding:US-ASCII&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="Array-shuffle-和-Array-sample-的随机参数调用时使用-max-参数"><a href="#Array-shuffle-和-Array-sample-的随机参数调用时使用-max-参数" class="headerlink" title="Array#shuffle! 和 Array#sample 的随机参数调用时使用 max 参数"></a><code>Array#shuffle!</code> 和 <code>Array#sample</code> 的随机参数调用时使用 <code>max</code> 参数</h2><p>这是一个小改动，或许对你完全没有影响，现在给 <code>Array</code> 的 <code>#shuffle!</code>、<code>#shuffle</code> 和 <code>#sample</code> 方法提供随机参数时，需要提供一个 <code>max</code> 参数，返回 0 到 max 之间一个整数，而不是 0 到 1 之间的浮点数。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</div><div class="line">randgen = Object.new</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">randgen</span>.<span class="title">rand</span><span class="params">(max)</span></span></div><div class="line">  max                           <span class="comment">#=&gt; 4</span></div><div class="line">  <span class="number">1</span></div><div class="line"><span class="keyword">end</span></div><div class="line">array.sample(<span class="symbol">random:</span> randgen)   <span class="comment">#=&gt; 3</span></div></pre></td></tr></table></figure>
+<h2 id="CGI-HTML5-标签构建器"><a href="#CGI-HTML5-标签构建器" class="headerlink" title="CGI HTML5 标签构建器"></a>CGI HTML5 标签构建器</h2><p>标准库中的 <code>CGI</code> 的标签构建器实例新增了 HTML5 模式</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"cgi"</span></div><div class="line">cgi = CGI.new(<span class="string">"html5"</span>)</div><div class="line">html = cgi.html <span class="keyword">do</span></div><div class="line">  cgi.head <span class="keyword">do</span></div><div class="line">    cgi.title &#123;<span class="string">"test"</span>&#125;</div><div class="line">  <span class="keyword">end</span> +</div><div class="line">  cgi.body <span class="keyword">do</span></div><div class="line">    cgi.header &#123;cgi.h1 &#123;<span class="string">"example"</span>&#125;&#125; +</div><div class="line">    cgi.p &#123;<span class="string">"lorem ipsum"</span>&#125;</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line">puts html</div></pre></td></tr></table></figure>
+<p>旧的 <code>#header</code> 方法（发送 HTTP 头）改名为 <code>#http_header</code>，其实它是 <code>#header</code> 方法的别名，因为考虑到非 HTML5 模式情况下的向下兼容性。</p>
+<h2 id="CSV-dump-和-CSV-load-被删除"><a href="#CSV-dump-和-CSV-load-被删除" class="headerlink" title="CSV::dump 和 CSV::load 被删除"></a><code>CSV::dump</code> 和 <code>CSV::load</code> 被删除</h2><p><code>CSV::dump</code> 和 <code>CSV::load</code> 被删除了。以前它们用来将 Ruby 的对象数组输出到 CSV 文件中，以实现序列化和反序列化。由于安全问题，这两个方法被删除了。</p>
+<h2 id="Iconv-被删除"><a href="#Iconv-被删除" class="headerlink" title="Iconv 被删除"></a><code>Iconv</code> 被删除</h2><p><code>Iconv</code> 被删除了，请使用 <code>String#encode</code>。</p>
+<p>以前你可能写了如下形式的代码</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"iconv"</span></div><div class="line">Iconv.conv(<span class="string">"ISO-8859-1"</span>, <span class="string">"UTF8"</span>, <span class="string">"Résumé"</span>)   <span class="comment">#=&gt; "R\xE9sum\xE9"</span></div></pre></td></tr></table></figure>
+<p>现在要写成</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"Résumé"</span>.encode(Encoding::ISO_8859_1)        <span class="comment">#=&gt; "R\xE9sum\xE9"</span></div></pre></td></tr></table></figure>
+<h2 id="Syck-被删除"><a href="#Syck-被删除" class="headerlink" title="Syck 被删除"></a><code>Syck</code> 被删除</h2><p>YAML 解析器 Syck 被删除了，因为有了更好的 Psych（由 libyaml 绑定），并且 Ruby 现在捆绑了 libyaml。Ruby 中 YAML 的接口都维持原样，所以对代码应该没有影响。</p>
+<h2 id="io-console"><a href="#io-console" class="headerlink" title="io/console"></a><code>io/console</code></h2><p><code>io/console</code> 不是新添加的，更新的只是<a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/io/console/rdoc/IO.html" target="_blank" rel="external">文档</a>，因此现在你可以知道怎么来使用它了。Ruby 2.0.0 的变更履历说新添加了 <code>IO#cooked</code> 和 <code>IO#cooked!</code>，但貌似 1.9.3 就有了。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"io/console"</span></div><div class="line">IO.console.raw!</div><div class="line"><span class="comment"># console in now in raw mode, disabling line editing and echoing</span></div><div class="line">IO.console.cooked!</div><div class="line"><span class="comment"># back in cooked mode, line editing works like normal</span></div></pre></td></tr></table></figure>
+<p><code>#raw!</code> 和 <code>#raw</code> 新增了两个参数，<code>min</code> 和 <code>time</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">IO.console.raw!(<span class="symbol">min:</span> <span class="number">5</span>) <span class="comment"># reading from console buffers for 5 chars</span></div><div class="line">IO.console.raw!(<span class="symbol">min:</span> <span class="number">5</span>, <span class="symbol">time:</span> <span class="number">1</span>) <span class="comment"># read after 1 second if buffer not full</span></div></pre></td></tr></table></figure>
+<h2 id="io-wait"><a href="#io-wait" class="headerlink" title="io/wait"></a><code>io/wait</code></h2><p><code>io/wait</code> 新增了 <code>#wait_writable</code> 方法，用来阻塞直到 IO 能够被写。<code>#wait</code> 改名为 <code>#wait_readable</code>，为了向下兼容性，还保留了 <code>#wait</code> 的别名方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"io/wait"</span></div><div class="line">timeout = <span class="number">1</span></div><div class="line">STDOUT.wait_writable(timeout)   <span class="comment">#=&gt; #&lt;IO:&lt;STDOUT&gt;&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="Net-HTTP-性能改进"><a href="#Net-HTTP-性能改进" class="headerlink" title="Net::HTTP 性能改进"></a><code>Net::HTTP</code> 性能改进</h2><p><code>Net::HTTP</code> 现在默认自动请求以及解压 gzip 并且使用 DEFLATE 压缩。这和全新的无全局解释器锁的 Zlib 相得益彰。</p>
+<p>SSL 会话现在被重用，减少了用于协商链接的时间。</p>
+<h2 id="Net-HTTP-能指定连接元的主机和端口"><a href="#Net-HTTP-能指定连接元的主机和端口" class="headerlink" title="Net::HTTP 能指定连接元的主机和端口"></a><code>Net::HTTP</code> 能指定连接元的主机和端口</h2><p>如果出于某种原因，你需要指定指定本地连接元的主机和端口，和连接目标的主机和端口，可以这样</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">http = Net::HTTP.new(remote_host, remote_port)</div><div class="line">http.local_host = local_host</div><div class="line">http.local_port = local_port</div><div class="line">http.start <span class="keyword">do</span></div><div class="line">  <span class="comment"># ...</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h2 id="OpenStruct-可以像-hash-一样"><a href="#OpenStruct-可以像-hash-一样" class="headerlink" title="OpenStruct 可以像 hash 一样"></a><code>OpenStruct</code> 可以像 hash 一样</h2><p><code>OpenStruct</code> 有了 <code>#[]</code>、<code>#[]=</code> 和 <code>#each_pair</code> 方法，所以可以如 hash 一样使用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"ostruct"</span></div><div class="line"></div><div class="line">o = OpenStruct.new</div><div class="line">o.foo = <span class="string">"test"</span></div><div class="line">o[<span class="symbol">:foo</span>]               <span class="comment">#=&gt; "test"</span></div><div class="line">o[<span class="symbol">:bar</span>] = <span class="string">"example"</span></div><div class="line">o.bar                 <span class="comment">#=&gt; example</span></div></pre></td></tr></table></figure>
+<p>同时它也新增了 <code>#hash</code> 和 <code>#eql?</code> 方法，这两个方法在 <code>Hash</code> 内部被用来检验相等性。这也使得 <code>OpenStruct</code> 能够更好地扮演 hash 键的作用，相等的对象能作为相同的键。</p>
+<h2 id="Resolv-支持超时"><a href="#Resolv-支持超时" class="headerlink" title="Resolv 支持超时"></a><code>Resolv</code> 支持超时</h2><p><code>Resolv</code> 现在支持自定义超时</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">"resolv"</span></div><div class="line"></div><div class="line">resolver = Resolv::DNS.new</div><div class="line">resolver.timeouts = <span class="number">1</span> <span class="comment"># 1 second</span></div><div class="line">resolver.getaddress(<span class="string">"globaldev.co.uk"</span>).to_s   <span class="comment">#=&gt; "204.232.175.78"</span></div></pre></td></tr></table></figure>
+<p>同样也能接收数组，依次设置超时时间。可以用下面的代码来实现指数回归</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">resolver.timeouts = [<span class="number">1</span>].tap &#123;<span class="params">|a|</span> <span class="number">5</span>.times &#123;a.push(a.last * <span class="number">2</span>)&#125;&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/20/the-last-of-us/" rel="next" title="The Last of Us">
+                <i class="fa fa-chevron-left"></i> The Last of Us
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/10/14/how-do-gems-work/" rel="prev" title="Ruby Gems 是如何运作的？">
+                Ruby Gems 是如何运作的？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关键字参数（Keyword-arguments）"><span class="nav-number">1.</span> <span class="nav-text">关键字参数（Keyword arguments）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#i-和-I-表示-symbol-数组的字面量"><span class="nav-number">2.</span> <span class="nav-text">%i 和 %I 表示 symbol 数组的字面量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refinements"><span class="nav-number">3.</span> <span class="nav-text">Refinements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Module-prepend"><span class="nav-number">4.</span> <span class="nav-text">Module#prepend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块中没有被绑定的方法可以被绑定到任意对象"><span class="nav-number">5.</span> <span class="nav-text">模块中没有被绑定的方法可以被绑定到任意对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#const-get-能理解命名空间了"><span class="nav-number">6.</span> <span class="nav-text">const_get 能理解命名空间了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#to-h-成为了转换成-hash-的标准方法"><span class="nav-number">7.</span> <span class="nav-text">#to_h 成为了转换成 hash 的标准方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-bsearch-和-Range-bsearch"><span class="nav-number">8.</span> <span class="nav-text">Array#bsearch 和 Range#bsearch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enumerable-lazy"><span class="nav-number">9.</span> <span class="nav-text">Enumerable#lazy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#惰性的-Enumerator-size-和-Range-size"><span class="nav-number">10.</span> <span class="nav-text">惰性的 Enumerator#size 和 Range#size</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rubygems-支持-Gemfile"><span class="nav-number">11.</span> <span class="nav-text">Rubygems 支持 Gemfile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDoc-支持-Markdown-格式"><span class="nav-number">12.</span> <span class="nav-text">RDoc 支持 Markdown 格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#像-puts-一样使用-warn"><span class="nav-number">13.</span> <span class="nav-text">像 puts 一样使用 warn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logger-兼容-syslog-接口"><span class="nav-number">14.</span> <span class="nav-text">Logger 兼容 syslog 接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TracePoint"><span class="nav-number">15.</span> <span class="nav-text">TracePoint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步线程中断处理"><span class="nav-number">16.</span> <span class="nav-text">异步线程中断处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收的改进"><span class="nav-number">17.</span> <span class="nav-text">垃圾回收的改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ObjectSpace-reachable-objects-from"><span class="nav-number">18.</span> <span class="nav-text">ObjectSpace.reachable_objects_from</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更好的调用栈"><span class="nav-number">19.</span> <span class="nav-text">更好的调用栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持-Zlib-流"><span class="nav-number">20.</span> <span class="nav-text">支持 Zlib 流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程-Zlib-处理"><span class="nav-number">21.</span> <span class="nav-text">多线程 Zlib 处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码默认为-UTF-8"><span class="nav-number">22.</span> <span class="nav-text">编码默认为 UTF-8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取得二进制字符串的方法"><span class="nav-number">23.</span> <span class="nav-text">取得二进制字符串的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-lines、-chars-等方法返回数组"><span class="nav-number">24.</span> <span class="nav-text">String#lines、#chars 等方法返回数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dir"><span class="nav-number">25.</span> <span class="nav-text">__dir__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#callee-返回调用它的方法名"><span class="nav-number">26.</span> <span class="nav-text">__callee__ 返回调用它的方法名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则表达式引擎换成了-Onigmo"><span class="nav-number">27.</span> <span class="nav-text">正则表达式引擎换成了 Onigmo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash-default-proc-现在可接收-nil"><span class="nav-number">28.</span> <span class="nav-text">Hash#default_proc= 现在可接收 nil</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-values-at-对每个越界的值都返回一个-nil"><span class="nav-number">29.</span> <span class="nav-text">Array#values_at 对每个越界的值都返回一个 nil</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#File-fnmatch-可以通过选项来展开括号"><span class="nav-number">30.</span> <span class="nav-text">File.fnmatch? 可以通过选项来展开括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shellwords-对参数调用-to-s"><span class="nav-number">31.</span> <span class="nav-text">Shellwords 对参数调用 #to_s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system-和-exec-现在默认关闭非标准的文件描述符"><span class="nav-number">32.</span> <span class="nav-text">system 和 exec 现在默认关闭非标准的文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#respond-to-对待-protected-方法同于-private-方法"><span class="nav-number">33.</span> <span class="nav-text">#respond_to? 对待 protected 方法同于 private 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inspect-不再调用-to-s"><span class="nav-number">34.</span> <span class="nav-text">#inspect 不再调用 #to_s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LoadError-path"><span class="nav-number">35.</span> <span class="nav-text">LoadError#path</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Process-getsid"><span class="nav-number">36.</span> <span class="nav-text">Process.getsid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Signal-signame"><span class="nav-number">37.</span> <span class="nav-text">Signal.signame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#捕捉内部信号会报错"><span class="nav-number">38.</span> <span class="nav-text">捕捉内部信号会报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#真正的线程局部变量"><span class="nav-number">39.</span> <span class="nav-text">真正的线程局部变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改善加入当前线程-主线程时的错误消息"><span class="nav-number">40.</span> <span class="nav-text">改善加入当前线程/主线程时的错误消息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于互斥锁的改动"><span class="nav-number">41.</span> <span class="nav-text">关于互斥锁的改动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义线程和纤程的栈大小"><span class="nav-number">42.</span> <span class="nav-text">自定义线程和纤程的栈大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更严格的-Fiber-transfer"><span class="nav-number">43.</span> <span class="nav-text">更严格的 Fiber#transfer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RubyVM-InstructionSequence"><span class="nav-number">44.</span> <span class="nav-text">RubyVM::InstructionSequence</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ObjectSpace-WeakMap"><span class="nav-number">45.</span> <span class="nav-text">ObjectSpace::WeakMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#顶层的-define-method"><span class="nav-number">46.</span> <span class="nav-text">顶层的 define_method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以下划线开头的变量在没被使用时不会发生警告"><span class="nav-number">47.</span> <span class="nav-text">以下划线开头的变量在没被使用时不会发生警告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proc-和-Proc-eql-方法被删除"><span class="nav-number">48.</span> <span class="nav-text">Proc#== 和 Proc#eql? 方法被删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARGF-each-codepoint"><span class="nav-number">49.</span> <span class="nav-text">ARGF#each_codepoint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-to-s"><span class="nav-number">50.</span> <span class="nav-text">Time#to_s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-shuffle-和-Array-sample-的随机参数调用时使用-max-参数"><span class="nav-number">51.</span> <span class="nav-text">Array#shuffle! 和 Array#sample 的随机参数调用时使用 max 参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CGI-HTML5-标签构建器"><span class="nav-number">52.</span> <span class="nav-text">CGI HTML5 标签构建器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSV-dump-和-CSV-load-被删除"><span class="nav-number">53.</span> <span class="nav-text">CSV::dump 和 CSV::load 被删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Iconv-被删除"><span class="nav-number">54.</span> <span class="nav-text">Iconv 被删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Syck-被删除"><span class="nav-number">55.</span> <span class="nav-text">Syck 被删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#io-console"><span class="nav-number">56.</span> <span class="nav-text">io/console</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#io-wait"><span class="nav-number">57.</span> <span class="nav-text">io/wait</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Net-HTTP-性能改进"><span class="nav-number">58.</span> <span class="nav-text">Net::HTTP 性能改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Net-HTTP-能指定连接元的主机和端口"><span class="nav-number">59.</span> <span class="nav-text">Net::HTTP 能指定连接元的主机和端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenStruct-可以像-hash-一样"><span class="nav-number">60.</span> <span class="nav-text">OpenStruct 可以像 hash 一样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Resolv-支持超时"><span class="nav-number">61.</span> <span class="nav-text">Resolv 支持超时</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

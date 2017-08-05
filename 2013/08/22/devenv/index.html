@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="（2014年3月更新：由于 Windows XP 即将停止服务，工作机器全部升级为 Windows 7，同时也更新本文。） 回国后短短的一周时间内，两次从一台崭新的机器开始装各种软件。遂写一篇文章记录安装过程。 因为是对日外包公司，所以操作系统是日文版的 Windows 7。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工作PC装机">
+<meta property="og:url" content="http://yoursite.com/2013/08/22/devenv/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="（2014年3月更新：由于 Windows XP 即将停止服务，工作机器全部升级为 Windows 7，同时也更新本文。） 回国后短短的一周时间内，两次从一台崭新的机器开始装各种软件。遂写一篇文章记录安装过程。 因为是对日外包公司，所以操作系统是日文版的 Windows 7。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2016-02-16T05:55:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="工作PC装机">
+<meta name="twitter:description" content="（2014年3月更新：由于 Windows XP 即将停止服务，工作机器全部升级为 Windows 7，同时也更新本文。） 回国后短短的一周时间内，两次从一台崭新的机器开始装各种软件。遂写一篇文章记录安装过程。 因为是对日外包公司，所以操作系统是日文版的 Windows 7。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2013/08/22/devenv/"/>
+
+
+
+
+
+  <title>工作PC装机 | Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/08/22/devenv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">工作PC装机</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-08-22T22:07:00+08:00">
+                2013-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>（2014年3月更新：由于 Windows XP 即将停止服务，工作机器全部升级为 Windows 7，同时也更新本文。）</p>
+<p>回国后短短的一周时间内，两次从一台崭新的机器开始装各种软件。遂写一篇文章记录安装过程。</p>
+<p>因为是对日外包公司，所以操作系统是日文版的 Windows 7。</p>
+<a id="more"></a>
+<ul>
+<li><p><a href="https://support.google.com/chrome/answer/126299?hl=ja" target="_blank" rel="external">Chrome浏览器</a>—— 这是Standalone的安装包。安装过程中不需要联网。因为使用传统的安装方式在国内的网络环境下很难安装成功。并安装以下的 Extension。</p>
+<ul>
+<li>SwichySharp —— 配合 goagent 使用，几乎感受不到墙的存在。</li>
+<li>Lastpass —— 记录自己所有网站的用户名密码的利器。</li>
+<li>Vimium —— 使用类似 Vim 的键位操作浏览器。能最大可能的脱离鼠标操作。</li>
+<li>Pocket —— 稍后阅读工具。</li>
+<li>Evernote Web Clipper</li>
+<li>Markdown Here</li>
+<li>Motivation</li>
+<li>RailsPanel</li>
+<li>Sunrise Calendar</li>
+<li>Wunderlist for Chrome</li>
+<li>有道词典Chrome鼠标取词插件</li>
+</ul>
+</li>
+<li><p><a href="https://www.diatec.co.jp/support/details/wxp-106usbsetup.html" target="_blank" rel="external">Filco日文键盘配置</a> —— 虽然是日文系统，但公司的机器默认是英文布局的键盘。而我自带了一把 <a href="http://www.diatec.co.jp/products/det.php?prod_c=1316" target="_blank" rel="external">Filco Minila</a> 的茶轴机械键盘。所以需要更改一下配置。</p>
+</li>
+<li><p><a href="https://code.google.com/p/goagent/" target="_blank" rel="external">goagent</a> —— 翻墙利器。公司连不上外部的VPN，所以只能用这个。效果还不错。</p>
+</li>
+<li><p><a href="https://evernote.com/intl/jp/" target="_blank" rel="external">Evernote</a> —— 我的外脑。所有需要记忆但又不想占用大脑存储空间的信息都在这里面。</p>
+</li>
+<li><p>各种字体 —— <a href="https://github.com/andreberg/Meslo-Font" target="_blank" rel="external">Meslo</a>、Source Code Pro、 Hiragino Sans GB、SourceHanSans。</p>
+</li>
+<li><p>Ricty 编程字体 —— 日语环境下编程字体的不二之选。是 Inconsolata 和 Migu 1M 字体的合成版。网上只有<a href="http://elfcobe.hateblo.jp/entry/2013/11/23/223456" target="_blank" rel="external">合成攻略</a>，并不提供现成的字体下载。</p>
+</li>
+<li><p><a href="http://www.7-zip.org/" target="_blank" rel="external">7zip</a> —— 开源压缩软件。</p>
+</li>
+<li><p><a href="http://www.voidtools.com/" target="_blank" rel="external">Everything</a> —— Windows 自带的文件搜索可用性几乎为零，全盘搜索一个文件要耗时数分钟。而使用 Everything，几乎是按下键的同时瞬间给出所有的结果。必备神器。安装完后将呼出的快捷键设置为「Alt + Shift + E」。勾上「Show row mouseover」「Show highlighted search terms」</p>
+</li>
+<li><p><a href="http://www.launchy.net/" target="_blank" rel="external">launchy</a> —— 启动程序神器。按下「Alt + 空格」呼出，输入程序名，即可启动。再一次，脱离鼠标操作。</p>
+</li>
+<li><p>将 CapsLock 键匹配为 Esc 键 —— Vim 用户必备。虽然我使用的是 Sublime Text 下的 Vim 模式。</p>
+</li>
+<li><p><a href="http://ipmsg.org/" target="_blank" rel="external">ipmsg</a> —— 公司内部交流工具。</p>
+</li>
+<li><p><a href="https://www.sublimetext.com/3" target="_blank" rel="external">Sublime Text 3</a> —— 目前为止用的最顺手的文本编辑器。并安装以下 Package。</p>
+<ul>
+<li>AdvanceNewFile</li>
+<li>AlignTab</li>
+<li>All Autocomplete</li>
+<li>Better CoffeeScript</li>
+<li>Block Cursor Everywhere</li>
+<li>ConvertToUTF8</li>
+<li>DocBlockr</li>
+<li>ERB Snippets</li>
+<li>Evernote</li>
+<li>FontCycler</li>
+<li>GitGutter</li>
+<li>IMESupport</li>
+<li>Markdown Preview</li>
+<li>MarkdownEditing</li>
+<li>RawLineEdit</li>
+<li>RSpec</li>
+<li>Ruby Block Converer</li>
+<li>Ruby on Rails snippets</li>
+<li>RubyTest</li>
+<li>Sass</li>
+<li>SideBarEnhancements</li>
+<li>Terminal</li>
+<li>Text Pastry</li>
+<li>Theme - Spacegray</li>
+<li>Vintageous</li>
+</ul>
+</li>
+<li><p><a href="https://github.com/vertiginous/pik/downloads" target="_blank" rel="external">pik</a> —— Windows 下的 Ruby 版本管理软件。</p>
+</li>
+<li><p><a href="http://getgreenshot.org/" target="_blank" rel="external">Greenshot</a> —— 小巧开源的截图工具。</p>
+</li>
+<li><p><a href="http://www.vector.co.jp/soft/dl/winnt/writing/se501579.html" target="_blank" rel="external">MacType</a> —— 字体渲染神器。</p>
+</li>
+<li><p>FoxitReader —— 国产PDF阅读器。觉得比官方的好用。</p>
+</li>
+<li><p><a href="https://autohotkey.com/" target="_blank" rel="external">AutoHotkey</a> —— 快捷键工具。我主要用来快速的调整当前窗口的大小。</p>
+</li>
+<li><p><a href="http://cidian.youdao.com/" target="_blank" rel="external">有道词典</a> —— 阅读英语文章利器。</p>
+</li>
+<li><p><a href="http://git-scm.com/" target="_blank" rel="external">Git</a> —— 版本管理工具。</p>
+</li>
+<li><p><a href="http://www.phraseexpress.com/" target="_blank" rel="external">PhraseExpress</a></p>
+</li>
+<li><p><a href="http://ditto-cp.sourceforge.net/" target="_blank" rel="external">Ditto</a></p>
+</li>
+<li><p><a href="http://cmder.net/" target="_blank" rel="external">cmder</a></p>
+</li>
+<li><p><a href="http://winmerge.org/" target="_blank" rel="external">Winmerge</a></p>
+</li>
+<li><p><a href="https://antibody-software.com/web/software/software/wizmouse-makes-your-mouse-wheel-work-on-the-window-under-the-mouse/" target="_blank" rel="external">WizMouse</a></p>
+</li>
+<li><p><a href="https://zealdocs.org/" target="_blank" rel="external">Zeal</a></p>
+</li>
+</ul>
+<h2 id="Sublime-Text-的设置"><a href="#Sublime-Text-的设置" class="headerlink" title="Sublime Text 的设置"></a>Sublime Text 的设置</h2>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	&quot;bold_folder_labels&quot;: true,</div><div class="line">	&quot;caret_extra_width&quot;: 2,</div><div class="line">	&quot;caret_style&quot;: &quot;phase&quot;,</div><div class="line">	&quot;certs&quot;:</div><div class="line">	&#123;</div><div class="line">		&quot;*&quot;:</div><div class="line">		[</div><div class="line">			&quot;goagent&quot;,</div><div class="line">			&quot;D:/goagent/local/CA.crt&quot;</div><div class="line">		]</div><div class="line">	&#125;,</div><div class="line">	&quot;color_scheme&quot;: &quot;Packages/Theme - Spacegray/base16-ocean.dark.tmTheme&quot;,</div><div class="line">	&quot;default_line_ending&quot;: &quot;unix&quot;,</div><div class="line">	&quot;detect_slow_plugins&quot;: false,</div><div class="line">	&quot;ensure_newline_at_eof_on_save&quot;: true,</div><div class="line">	&quot;file_exclude_patterns&quot;:</div><div class="line">	[</div><div class="line">		&quot;*.pyc&quot;,</div><div class="line">		&quot;*.pyo&quot;,</div><div class="line">		&quot;*.exe&quot;,</div><div class="line">		&quot;*.dll&quot;,</div><div class="line">		&quot;*.obj&quot;,</div><div class="line">		&quot;*.o&quot;,</div><div class="line">		&quot;*.a&quot;,</div><div class="line">		&quot;*.lib&quot;,</div><div class="line">		&quot;*.so&quot;,</div><div class="line">		&quot;*.dylib&quot;,</div><div class="line">		&quot;*.ncb&quot;,</div><div class="line">		&quot;*.sdf&quot;,</div><div class="line">		&quot;*.suo&quot;,</div><div class="line">		&quot;*.pdb&quot;,</div><div class="line">		&quot;*.idb&quot;,</div><div class="line">		&quot;.DS_Store&quot;,</div><div class="line">		&quot;*.class&quot;,</div><div class="line">		&quot;*.psd&quot;,</div><div class="line">		&quot;*.db&quot;,</div><div class="line">		&quot;*.sublime-workspace&quot;,</div><div class="line">		&quot;vssver2.scc&quot;</div><div class="line">	],</div><div class="line">	&quot;font_face&quot;: &quot;Ricty&quot;,</div><div class="line">	&quot;font_size&quot;: 14,</div><div class="line">	&quot;fonts_list&quot;:</div><div class="line">	[</div><div class="line">		&#123;</div><div class="line">			&quot;font_face&quot;: &quot;Ricty&quot;,</div><div class="line">			&quot;font_size&quot;: 14</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			&quot;font_face&quot;: &quot;SourceHanSans-Normal&quot;,</div><div class="line">			&quot;font_size&quot;: 13</div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	&quot;highlight_line&quot;: true,</div><div class="line">	&quot;http_proxy&quot;: &quot;http://10.0.196.158:3128&quot;,</div><div class="line">	&quot;ignored_packages&quot;:</div><div class="line">	[</div><div class="line">		&quot;Markdown&quot;,</div><div class="line">		&quot;Vintage&quot;</div><div class="line">	],</div><div class="line">	&quot;line_padding_bottom&quot;: 0,</div><div class="line">	&quot;line_padding_top&quot;: 0,</div><div class="line">	&quot;rulers&quot;:</div><div class="line">	[</div><div class="line">		130</div><div class="line">	],</div><div class="line">	&quot;show_encoding&quot;: true,</div><div class="line">	&quot;show_line_endings&quot;: true,</div><div class="line">	&quot;show_tab_close_buttons&quot;: false,</div><div class="line">	&quot;spacegray_sidebar_font_large&quot;: true,</div><div class="line">	&quot;spacegray_tabs_font_large&quot;: true,</div><div class="line">	&quot;spacegray_tabs_large&quot;: true,</div><div class="line">	&quot;tab_size&quot;: 2,</div><div class="line">	&quot;theme&quot;: &quot;Spacegray Light.sublime-theme&quot;,</div><div class="line">	&quot;translate_tabs_to_spaces&quot;: true,</div><div class="line">	&quot;trim_trailing_white_space_on_save&quot;: true,</div><div class="line">	&quot;vintageous_reset_mode_when_switching_tabs&quot;: false,</div><div class="line">	&quot;word_separators&quot;: &quot;./\\()\&quot;&apos;-:,.;&lt;&gt;~@#$%^&amp;*|+=[]&#123;&#125;`~&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/07/31/collect/" rel="next" title="收集:一切时间管理和任务管理的前提">
+                <i class="fa fa-chevron-left"></i> 收集:一切时间管理和任务管理的前提
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/09/20/dots/" rel="prev" title="Connect the Dots">
+                Connect the Dots <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sublime-Text-的设置"><span class="nav-number">1.</span> <span class="nav-text">Sublime Text 的设置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

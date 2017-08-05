@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.lug.ustc.edu.cn/css?family=Open Sans:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby, Rails" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="程序员一般都不喜欢写测试代码。而不久之前，我也是其中一员。从自身的经验出发，以前反感写测试代码的理由有以下几点。  觉得写测试代码不是创造性劳动。相比实现代码，写测试代码的时候确实少了一份激情。因为这些代码并不会给 Application 增加 feature，或提高性能。花了很多时间，进度却没有向前，难免有所抵触。 觉得测试代码没有价值。传统的 Web 开发方式中，我们确认自己的代码能够正常运作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拥抱测试">
+<meta property="og:url" content="http://yoursite.com/2013/11/22/embrace-test/index.html">
+<meta property="og:site_name" content="Vincent Zhao">
+<meta property="og:description" content="程序员一般都不喜欢写测试代码。而不久之前，我也是其中一员。从自身的经验出发，以前反感写测试代码的理由有以下几点。  觉得写测试代码不是创造性劳动。相比实现代码，写测试代码的时候确实少了一份激情。因为这些代码并不会给 Application 增加 feature，或提高性能。花了很多时间，进度却没有向前，难免有所抵触。 觉得测试代码没有价值。传统的 Web 开发方式中，我们确认自己的代码能够正常运作">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-05T03:34:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="拥抱测试">
+<meta name="twitter:description" content="程序员一般都不喜欢写测试代码。而不久之前，我也是其中一员。从自身的经验出发，以前反感写测试代码的理由有以下几点。  觉得写测试代码不是创造性劳动。相比实现代码，写测试代码的时候确实少了一份激情。因为这些代码并不会给 Application 增加 feature，或提高性能。花了很多时间，进度却没有向前，难免有所抵触。 觉得测试代码没有价值。传统的 Web 开发方式中，我们确认自己的代码能够正常运作">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2013/11/22/embrace-test/"/>
+
+
+
+
+
+  <title>拥抱测试 | Vincent Zhao</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43899568-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Zhao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Just some thoughts to output</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/11/22/embrace-test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">拥抱测试</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-22T20:54:00+08:00">
+                2013-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/weblog/" itemprop="url" rel="index">
+                    <span itemprop="name">weblog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>程序员一般都不喜欢写测试代码。而不久之前，我也是其中一员。从自身的经验出发，以前反感写测试代码的理由有以下几点。</p>
+<ul>
+<li><strong>觉得写测试代码不是创造性劳动。</strong>相比实现代码，写测试代码的时候确实少了一份激情。因为这些代码并不会给 Application 增加 feature，或提高性能。花了很多时间，进度却没有向前，难免有所抵触。</li>
+<li><strong>觉得测试代码没有价值。</strong>传统的 Web 开发方式中，我们确认自己的代码能够正常运作的方式通常是亲自去浏览器上操作运行后的页面。等到自己感觉 OK 了，为了应付客户要求或者纯粹追求覆盖率，才不得不写测试代码。此时自己对实现代码已经颇有信心，所以写完测试代码后，绝大多数情况下测试都是能够 pass 的，pass 不了多半也是测试代码写的有问题。所以会感觉测试代码并没有发挥出应有的价值。</li>
+<li><strong>测试代码很难维护。</strong>无论是 Application 的需求有变化，或是改动了一些代码。经常发现会破坏了原有的测试代码，导致我们改完了实现代码后不得不再去修改测试代码，使它能够跟上时代的步伐。经过几次之后，测试代码并没有引导我们的开发，反而成了累赘。</li>
+<li><strong>测试的执行速度很慢。</strong>特别是 Ruby 项目的测试，有些项目变大以后执行一次全套的测试甚至需要一个多小时。而平时的开发过程中，执行单个文件中的测试需要一两分钟的案例屡见不鲜。</li>
+</ul>
+<a id="more"></a>
+<p>对测试代码的态度出现转变的转折点出现在10月底去北京参加的 <a href="http://rubyconfchina.org/" target="_blank" rel="external">RubyConfChina 2013</a>，两天的时间里听了十几位嘉宾的演讲，而其中有3个演讲是专门讲测试的。分别是 <a href="http://www.infoq.com/cn/presentations/rails-application-testing-happy" target="_blank" rel="external">Test your Rails application with pleasure</a>、 <a href="http://www.infoq.com/cn/presentations/somethings-about-rspec" target="_blank" rel="external">RSpec: the good parts and the tricky parts</a>、 <a href="http://www.infoq.com/cn/presentations/with-tests-found-a-better-object-oriented-design" target="_blank" rel="external">Discovering Better Object Oriented Design with Tests</a>。之前在看<a href="http://book.douban.com/subject/6052175/" target="_blank" rel="external">《Eloquent Ruby》</a>这本书时，作者就说到 Ruby 社区可能是最喜欢写测试的程序员群体，Ruby 的测试框架和各类辅助测试的工具不胜枚举。这次也证实了此言非虚。</p>
+<p>回来以后正好工作上开始了新项目，自己便趁此机会将学到的东西应用到项目开发中，看看测试究竟是否真的有那么神奇。几个星期下来，自己的感受如下。</p>
+<ul>
+<li><strong>测试代码质量提高。</strong>新项目中开发时，我尽可能放弃了人肉测试这一调试方式。Ruby 的 <a href="https://github.com/jnicklas/capybara" target="_blank" rel="external">Capybara</a> 和 <a href="https://github.com/jonleighton/poltergeist" target="_blank" rel="external">Poltergeist</a> 等工具提供了用代码来模拟用户在浏览器上的操作的功能。同时也尽量强迫自己使用TDD的开发流程，也就是测试先行，虽然目前还没有达到100%的 TDD。这种方式下，如果心中有不安，就会增加测试的 case，因此测试代码的质量很高。测试全部pass就意味着目前考虑到的确认点都没有问题，可以安心的继续后面的开发。反正都是要写测试代码的，所以让它们变的更有价值一些，不是很好吗？</li>
+<li><strong>信心增强。</strong>有了完善的测试代码后，就可以放手去重构代码或是试验更好的实现方式了，只要测试通过就说明代码没有问题，根本无需亲自去页面上确认。</li>
+<li><strong>节约时间。</strong>由于开发和测试使用的是不同的数据库，所以以前经常需要准备两套数据。一套是开发数据库的，用于人肉测试。另一套是测试数据。而现在不仅节省了肉测的时间，也省去了造数据的功夫。相当于开发效率加倍了。还有上面讲到的确认重构或修改代码有没有问题，只需花一分钟不到的时间跑一下测试即可，这部分时间也能节省不少。</li>
+</ul>
+<p>总的来说，测试既节约了时间又增加了信心，所以更加愿意完善自己的测试代码，结果信心越来越强，形成了良性循环。所以如果你还是很抵触写测试代码，不妨放下成见，拥抱测试，相信你会感受到测试带来的那种美好的感觉。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/11/19/factory-girl-syntax-error/" rel="next" title="解决使用FactoryGirl时找不到方法的错误">
+                <i class="fa fa-chevron-left"></i> 解决使用FactoryGirl时找不到方法的错误
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/12/02/change-life-guide/" rel="prev" title="一份关于如何改变人生的指南">
+                一份关于如何改变人生的指南 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/zhaowen.png"
+               alt="Vincent Zhao" />
+          <p class="site-author-name" itemprop="name">Vincent Zhao</p>
+           
+              <p class="site-description motion-element" itemprop="description">程序员，玩家，死理性派，工具控，拖延症，右脑探索者</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhaowen869@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/VincentZhao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhaowenchina" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/Vincent__Zhao" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/2872840/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhao-wen-27" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Zhao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
