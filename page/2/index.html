@@ -103,7 +103,7 @@
 <meta name="description" content="程序员，玩家，死理性派，工具控，拖延症，右脑探索者">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Vincent Zhao">
-<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:url" content="http://zhaowen.me/page/2/index.html">
 <meta property="og:site_name" content="Vincent Zhao">
 <meta property="og:description" content="程序员，玩家，死理性派，工具控，拖延症，右脑探索者">
 <meta property="og:locale" content="zh-Hans">
@@ -138,7 +138,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/2/"/>
+  <link rel="canonical" href="http://zhaowen.me/page/2/"/>
 
 
 
@@ -268,7 +268,217 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/31/length-vs-size-vs-count/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/04/09/whats-new-in-rails-4-dot-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/zhaowen.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Zhao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/04/09/whats-new-in-rails-4-dot-1/" itemprop="url">Rails 4.1 的新特性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-04-09T20:21:00+08:00">
+                2014-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/translation/" itemprop="url" rel="index">
+                    <span itemprop="name">translation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>原文： <a href="http://brewhouse.io/blog/2013/12/17/whats-new-in-rails-4-1.html" target="_blank" rel="external">What’s new in Rails 4.1</a></p>
+<p>如果你还不知道的话，Rails 4.1 已经<a href="http://weblog.rubyonrails.org/" target="_blank" rel="external">于今天正式发布了</a>！虽然只是版本的小更新，但还是新引入了诸多激动人心的新特性。本文列出了其中几个最让我欣喜的新特性，并介绍了为什么我觉得它们很有用。</p>
+<h2 id="Action-Mailer-预览"><a href="#Action-Mailer-预览" class="headerlink" title="Action Mailer 预览"></a>Action Mailer 预览</h2><p>测试 Rails 的邮件模板一直以来都很不方便。目前我的测试流程为：</p>
+<ol>
+<li>改动邮件模板</li>
+<li>通过 rails console 发送邮件</li>
+<li>在浏览器中查看输出内容</li>
+<li>重复上述步骤</li>
+</ol>
+<p>虽然 <a href="https://github.com/ryanb/letter_opener" target="_blank" rel="external">Letter Opener</a> gem 提供了一些便利，但还远远不够理想。幸运的是，<a href="https://github.com/pixeltrix" target="_blank" rel="external">@pixeltrix</a> 通过一番努力将 <a href="https://github.com/37signals/mail_view" target="_blank" rel="external">MailView</a> gem 集成进了 Rails 4.1。现在你可以轻易地为 mailer 创建 preview 并在浏览器中进行预览了 <code>http://localhost:3000/rails/mailers</code>：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># In /test/mailers/previews/notifier_preview.rb</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotifierPreview</span> &lt; ActionMailer::Preview</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">welcome</span></span></div><div class="line">    <span class="comment"># Mock up some data for the preview</span></div><div class="line">    user = FactoryGirl.build(<span class="symbol">:user</span>)</div><div class="line"></div><div class="line">    <span class="comment"># Return a Mail::Message here (but don't deliver it!)</span></div><div class="line">    Notifier.welcome(user)</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>需要注意的是，虽然默认情况下 preview 文件位于 test 目录下（可以通过 <code>config.action_mailer.preview_path</code> 修改），但其实它运行于 development 环境。因此，如果你要用 <code>FactoryGirl</code> 等 gem 来生成数据，需要确保 Gemfile 中这些 gem 也在 development 的 group 下面。</p>
+<p>如果你的 app 没有 <code>test</code> 目录（比如 <code>rspec</code> 用户），你可能会将默认的 <code>config.action_mailer.preview_path</code> 修改成类似 <code>/app/mailer/previews</code> 的路径。但请注意，<code>/app</code> 目录在 production 环境下是即时加载（eager-loaded）的，所以或许这并不是 preview 文件的最佳存放之处。</p>
+<p>该特性的延伸阅读：</p>
+<ul>
+<li><a href="http://edgeguides.rubyonrails.org/4_1_release_notes.html#action-mailer-previews" target="_blank" rel="external">Release notes</a></li>
+<li><a href="http://edgeapi.rubyonrails.org/classes/ActionMailer/Base.html" target="_blank" rel="external">Documentation</a></li>
+<li>Pull request: <a href="https://github.com/rails/rails/pull/13332" target="_blank" rel="external">#13332</a></li>
+</ul>
+<h2 id="Active-Record-Enums"><a href="#Active-Record-Enums" class="headerlink" title="Active Record Enums"></a>Active Record Enums</h2><p>你曾经在 model 中使用多个 <code>boolean</code> 字段来表示一个复杂的状态吗？我绝对这么干过，并且代码很快就变得无法控制了。</p>
+<p>救星 Enums 来了！</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bug</span> &lt; ActiveRecord::Base</span></div><div class="line">  <span class="comment"># Relevant schema change looks like this:</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment"># create_table :bugs do |t|</span></div><div class="line">  <span class="comment">#   t.column :status, :integer, default: 0 # defaults to the first value (i.e. :new)</span></div><div class="line">  <span class="comment"># end</span></div><div class="line"></div><div class="line">  enum <span class="symbol">status:</span> [ <span class="symbol">:new</span>, <span class="symbol">:assigned</span>, <span class="symbol">:in_progress</span>, <span class="symbol">:resolved</span>, <span class="symbol">:rejected</span>, <span class="symbol">:reopened</span> ]</div><div class="line"></div><div class="line">  belongs_to <span class="symbol">:assignee</span>, <span class="symbol">class_name:</span> <span class="string">'Developer'</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">assignee=</span><span class="params">(developer)</span></span></div><div class="line">    <span class="keyword">if</span> developer &amp;&amp; <span class="keyword">self</span>.new?</div><div class="line">      <span class="keyword">self</span>.status = <span class="symbol">:assigned</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">      <span class="keyword">self</span>.status = <span class="symbol">:new</span></div><div class="line">    <span class="keyword">end</span></div><div class="line"></div><div class="line">    <span class="keyword">super</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">Bug.resolved           <span class="comment"># =&gt; a scope to find all resolved bugs</span></div><div class="line"></div><div class="line">bug.resolved?          <span class="comment"># =&gt; check if bug has the status :resolved</span></div><div class="line"></div><div class="line">bug.resolved!          <span class="comment"># =&gt; update! the bug with status set to :resolved</span></div><div class="line"></div><div class="line">bug.status             <span class="comment"># =&gt; a symbol describing the bug's status</span></div><div class="line"></div><div class="line">bug.status = <span class="symbol">:resolved</span> <span class="comment"># =&gt; set the bug's status to :resolved</span></div></pre></td></tr></table></figure>
+<p>在内部，与这些状态在数据库中相对应的是整数值，以节省空间。同样值得一提的是，<code>enum</code> 宏所添加的方法是通过 mix-in 一个 module 来实现的。这意味着你可以方便地在 model 中重写它们并使用 <code>super</code> 来调用原来的实现。</p>
+<p>使用该特性时还有如下一些注意事项：</p>
+<p><strong>I.</strong> 不要被其名字所迷惑，在一些数据库中并不使用 <code>ENUM</code> 类型来实现该特性。状态和其对应的整数值的匹配是通过 model 文件来维护的。所以一旦定义完 <code>enum</code> 的 symbol 后，你就不应该再去改动其顺序了。要移除不用的状态，可以使用显式的匹配：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bug</span> &lt; ActiveRecord::Base</span></div><div class="line">  enum <span class="symbol">status:</span> &#123;</div><div class="line">    <span class="symbol">new:</span> <span class="number">0</span>,</div><div class="line">    <span class="symbol">in_progress:</span> <span class="number">2</span>,</div><div class="line">    <span class="symbol">resolved:</span> <span class="number">3</span>,</div><div class="line">    <span class="symbol">rejected:</span> <span class="number">4</span>,</div><div class="line">    <span class="symbol">reopened:</span> <span class="number">5</span></div><div class="line">  &#125;</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p><strong>II.</strong> 避免在一个类的不同 enum 中使用相同的名字！这样会使 Active Record 很迷茫！</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bug</span> &lt; ActiveRecord::Base</span></div><div class="line">  enum <span class="symbol">status:</span> [ <span class="symbol">:new</span>, ... ]</div><div class="line">  enum <span class="symbol">code_review_status:</span> [ <span class="symbol">:new</span>, ... ] <span class="comment"># WARNING: Don't do this!</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p><strong>III.</strong> 如果你要使用自定义的 scope 来查询 enum 字段，需要传入对应的整数而不是 symbol。你可以使用宏所添加的常量来访问 enum-integer 的匹配：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bug</span> &lt; ActiveRecord::Base</span></div><div class="line">  scope <span class="symbol">:open</span>, -&gt; &#123;</div><div class="line">    where(<span class="string">'status &lt;&gt; ? OR status &lt;&gt; ?'</span>, STATUS[<span class="symbol">:resolved</span>], STATUS[<span class="symbol">:rejected</span>])</div><div class="line">  &#125;</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p><del><strong>IV.</strong> 目前，dirty tracking 方法（比如 <code>status_was?</code>）还无法用于 enum（目前返回的是整数值而不是 symbol 值）。此问题应该在正式版发布前会修复（进度参见 <a href="https://github.com/rails/rails/pull/13267" target="_blank" rel="external">#13267</a>）</del></p>
+<p>该特性的延伸阅读：</p>
+<ul>
+<li><a href="http://edgeguides.rubyonrails.org/4_1_release_notes.html#active-record-enums" target="_blank" rel="external">Release notes</a></li>
+<li><a href="http://edgeapi.rubyonrails.org/classes/ActiveRecord/Enum.html" target="_blank" rel="external">Documentation</a></li>
+<li>Original commit: <a href="https://github.com/rails/rails/commit/db41eb8a6ea88b854bf5cd11070ea4245e1639c5" target="_blank" rel="external">db41eb8a</a></li>
+</ul>
+<h2 id="Action-Pack-Variants"><a href="#Action-Pack-Variants" class="headerlink" title="Action Pack Variants"></a>Action Pack Variants</h2><p>作为 Web 开发人员，应该已经意识到我们已经全面过渡到了<a href="http://zh.wikipedia.org/wiki/%E5%BE%8C%E5%80%8B%E4%BA%BA%E9%9B%BB%E8%85%A6%E6%99%82%E4%BB%A3" target="_blank" rel="external">后PC时代</a>。虽然我钟爱于响应式设计，但它并不是解决跨设备网页显示问题的银弹。多数情况下，更合适的方法是为特定的设备种类定制 view 来显示最恰当的内容。</p>
+<p>有了 <strong>Action Pack Variants</strong> 以后，在 Rails 4.1 中实现起来就容易多了：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApplicationController</span> &lt; ActionController::Base</span></div><div class="line">  before_action <span class="symbol">:detect_device_variant</span></div><div class="line"></div><div class="line">  private</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detect_device_variant</span></span></div><div class="line">      <span class="keyword">case</span> request.user_agent</div><div class="line">      <span class="keyword">when</span> /iPad/i</div><div class="line">        request.variant = <span class="symbol">:tablet</span></div><div class="line">      <span class="keyword">when</span> /iPhone/i</div><div class="line">        request.variant = <span class="symbol">:phone</span></div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostController</span> &lt; ApplicationController</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span></div><div class="line">    @post = Post.find(params[<span class="symbol">:id</span>])</div><div class="line"></div><div class="line">    respond_to <span class="keyword">do</span> <span class="params">|format|</span></div><div class="line">      format.json</div><div class="line">      format.html               <span class="comment"># /app/views/posts/show.html.erb</span></div><div class="line">      format.html.phone         <span class="comment"># /app/views/posts/show.html+phone.erb</span></div><div class="line">      format.html.tablet <span class="keyword">do</span></div><div class="line">        @show_edit_link = <span class="literal">false</span></div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>上面的示例用了 <code>before_action</code> 使 HTTP 的 <code>User-Agent</code> 消息头匹配给定的关键字，并相应地赋值给 <code>request.variant</code>。在 <code>respond_to</code> 的 block 中通过指定所支持的 variant，Rails 会根据特定的 format 和 variant 的组合来 render 相应的模板。你还可以传一个 block 来指定某个 variant 的情况下要执行的代码。</p>
+<p>实际上你甚至可以将声明省略——只要在 <code>views</code> 目录下有对应的模板文件，Rails 就会自动匹配上。而如果某个 variant 没有专门的模板，Rails 会退一步去加载该 format 默认的模板（比如 <code>show.html.erb</code>）。因此你可以在两个 variant 之间共享模板。在上面的示例中，如果不存在 <code>/app/views/posts/show.html+tablet.erb</code>， <code>tablet</code> variant 就会重用默认模板。</p>
+<p>虽然在介绍该特性时，大多数示例都会使用 <code>User-Agent</code> 消息头，但值得注意的是 Rails 中的实现完全是不可预知的。在渲染模板之前，<code>request.variant</code> 可能是基于任何条件被赋值的，例如基于请求的域名（或子域名）、HTTP 消息头、session 数据、甚至是抛硬币的结果。</p>
+<p>这就使得该特性具有相当的灵活性，可以用于很多用途，例如 API 版本控制、A/B 测试、甚至可以用来做特性演示！</p>
+<p>该特性的延伸阅读：</p>
+<ul>
+<li><a href="http://edgeguides.rubyonrails.org/4_1_release_notes.html#variants" target="_blank" rel="external">Release notes</a></li>
+<li><a href="http://edgeapi.rubyonrails.org/classes/ActionController/MimeResponds.html#method-i-respond_to" target="_blank" rel="external">Documentation</a></li>
+<li>Pull request: <a href="https://github.com/rails/rails/pull/12977" target="_blank" rel="external">#12977</a>、<a href="https://github.com/rails/rails/pull/13290" target="_blank" rel="external">#13290</a></li>
+</ul>
+<h2 id="Application-Message-Verifier"><a href="#Application-Message-Verifier" class="headerlink" title="Application Message Verifier"></a>Application Message Verifier</h2><p>Rails 4.1 还引入了一个内置的 helper 来生成基于 <a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code" target="_blank" rel="external">HMAC</a> 的加密消息。消息验证以前被用于加密 Cookies 等高端操作，然而现在已经可以方便地将其用于其他一些用途了。</p>
+<p>例如，你可以实现一个无状态的「重置密码」功能而无须在数据库中存储 token：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> &lt; ActiveRecord::Base</span></div><div class="line">  <span class="class"><span class="keyword">class</span> &lt;&lt; self</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">verifier_for</span><span class="params">(purpose)</span></span></div><div class="line">      @verifiers <span class="params">||</span>= &#123;&#125;</div><div class="line">      @verifiers.fetch(purpose) <span class="keyword">do</span> <span class="params">|p|</span></div><div class="line">        @verifiers[p] = Rails.application.message_verifier(<span class="string">"<span class="subst">#&#123;<span class="keyword">self</span>.name&#125;</span>-<span class="subst">#&#123;p.to_s&#125;</span>"</span>)</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">reset_password_token</span></span></div><div class="line">    verifier = <span class="keyword">self</span>.<span class="keyword">class</span>.verifier_for(<span class="string">'reset-password'</span>) <span class="comment"># Unique for each type of messages</span></div><div class="line">    verifier.generate([id, Time.now])</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">reset_password!</span><span class="params">(token, new_password, new_password_confirmation)</span></span></div><div class="line">    <span class="comment"># This raises an exception if the message is modified</span></div><div class="line">    user_id, timestamp = <span class="keyword">self</span>.<span class="keyword">class</span>.verifier_for(<span class="string">'reset-password'</span>).verify(token)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> timestamp &gt; <span class="number">1</span>.day.ago</div><div class="line">      <span class="keyword">self</span>.password = new_password</div><div class="line">      <span class="keyword">self</span>.password_confirmation = new_password_confirmation</div><div class="line">      save!</div><div class="line">    <span class="keyword">else</span></div><div class="line">      <span class="comment"># Token 过期</span></div><div class="line">      <span class="comment"># ...</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Notifier</span> &lt; ActionMailer::Base</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">reset_password</span><span class="params">(user)</span></span></div><div class="line">    @user = user</div><div class="line">    @reset_password_url = password_reset_url(<span class="symbol">token:</span> @user.reset_password_token)</div><div class="line">    mail(<span class="symbol">to:</span> user.email, <span class="symbol">subject:</span> <span class="string">"Your have requested to reset your password"</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>这样一来，重置密码所需的所有信息都包含在链接中了，没必要在数据库中存储信息。这也能用于 <code>OAuth</code> 等（<code>state</code> 参数）。</p>
+<p>使用该特性时，需要重点防范<a href="http://en.wikipedia.org/wiki/Replay_attack" target="_blank" rel="external">重放攻击</a>。以上面的代码为例，如果我们没有使用 timestamp 来检验是否过期，万一邮件落到了居心不良的人手中，这个 URL 就可以随时用来重置用户的密码！</p>
+<p>另外，用来加密消息的 key 基于应用程序的 <code>secret_key_base</code> 以及你加入的「盐值（salt）」（本例中为 <code>User-reset-password</code>）。改变其中一个，就会使得之前的加密消息全部无效。</p>
+<h2 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h2><p>根据你使用的 gems，启动一个 Rails app 平均需要5秒钟时间。意味着每次运行测试都会浪费5秒钟，哪怕你只是运行一个单独的测试用例！如果你遵循 TDD，你每天大约会运行50次测试。这么算的话，过去5年中就浪费了<a href="http://xkcd.com/1205/" target="_blank" rel="external">整整5天时间</a>！</p>
+<p>我们终于时来运转，由 Rails 4.1 生成的新应用在内部集成了预加载器 <a href="https://github.com/jonleighton/spring" target="_blank" rel="external">Spring</a>。</p>
+<p>Spring 使你的应用程序运行于后台，所以你就不必每次运行测试、rake task 或 migration 时都要启动应用程序了。如果你熟悉 <a href="https://github.com/burke/zeus" target="_blank" rel="external">Zeus</a> 或 <a href="https://github.com/sporkrb/spork" target="_blank" rel="external">Spork</a> 等 gem，就不会对此感到陌生。然而 spring 使用 binstub 包装了常用的 Rails 命令（默认为 <code>rake</code> 和 <code>rails</code>），因此如果 <code>./bin</code> 在你的 <code>PATH</code> 中，那么什么都不用做就能提速不少了！</p>
+<p>我在自己的项目中试了一下，使用了 spring 后每次运行测试都能节省近5秒钟。我能因此得到5天假期吗？:)</p>
+<p>你可以阅读 <a href="https://github.com/jonleighton/spring#readme" target="_blank" rel="external">Spring README</a> 来了解它的工作原理，以及如何在既有的项目中引入它。</p>
+<p>该特性的延伸阅读：</p>
+<ul>
+<li><a href="http://edgeguides.rubyonrails.org/4_1_release_notes.html#spring-application-preloader" target="_blank" rel="external">Release notes</a></li>
+<li><a href="http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#spring" target="_blank" rel="external">Upgrading guide</a></li>
+<li><a href="https://github.com/jonleighton/spring#readme" target="_blank" rel="external">Documentation</a></li>
+<li>Pull request: <a href="https://github.com/rails/rails/pull/12958" target="_blank" rel="external">#12958</a></li>
+</ul>
+<h2 id="其他新特性"><a href="#其他新特性" class="headerlink" title="其他新特性"></a>其他新特性</h2><p>这些都只是本次更新内容的一部分。还有很多其他可能对你有用的新特性，比如 <a href="http://edgeguides.rubyonrails.org/4_1_release_notes.html#config-secrets-yml" target="_blank" rel="external">使用 secrets.yml 来记录敏感数据</a>、<a href="https://github.com/rails/rails/pull/12824" target="_blank" rel="external">在测试中控制时间</a>、<a href="https://github.com/rails/rails/pull/12183" target="_blank" rel="external">更好的 JSON 处理</a>、<a href="http://edgeguides.rubyonrails.org/4_1_release_notes.html#module-concerning" target="_blank" rel="external">Module#concerning</a>、<a href="https://github.com/rails/rails/pull/12891" target="_blank" rel="external">to_param 宏</a>等等。我建议你通过<a href="http://edgeguides.rubyonrails.org/4_1_release_notes.html" target="_blank" rel="external">更新日志</a>来查看所有的变更点！</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/03/31/length-vs-size-vs-count/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -426,7 +636,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/25/ruby-recommendation-system/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/03/25/ruby-recommendation-system/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -584,7 +794,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/22/iteration-as-an-anti-pattern/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/03/22/iteration-as-an-anti-pattern/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -778,7 +988,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/13/preload-eagerload-includes-and-joins/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/03/13/preload-eagerload-includes-and-joins/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -949,7 +1159,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/07/be-careful-with-before-all/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/03/07/be-careful-with-before-all/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -1099,7 +1309,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/04/ruby-gotchas/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/03/04/ruby-gotchas/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -1250,7 +1460,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/01/26/grateful/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/01/26/grateful/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -1429,7 +1639,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/01/24/quite-life/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/01/24/quite-life/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -1597,195 +1807,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/01/13/habit-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Vincent Zhao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/zhaowen.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Vincent Zhao">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/01/13/habit-guide/" itemprop="url">坚持习惯的养成：终极指南</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-13T11:15:00+08:00">
-                2014-01-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/liberal-translation/" itemprop="url" rel="index">
-                    <span itemprop="name">liberal-translation</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>说起习惯的养成，大部分人觉得最难的部分在于坚持，坚持足够久而使其根深蒂固。</p>
-<p>——拜托，这不是废话嘛。</p>
-<p>它解释了为什么人们不锻炼身体，不健康饮食；为什么人们会拖延，会让房间杂乱无章，会负债累累；为什么人们抽烟、喝碳酸饮料；为什么人们不冥想，不学习一门新的语言，不每天写作，不更多的阅读。</p>
-<p>简单地说：如果你在养成习惯时学会了坚持，你就能做成任何事。<a href="http://zenhabits.net/my-story/" target="_blank" rel="external">我就是一个活生生的例子</a>。</p>
-<p>如何在培养习惯时坚持下去？我尽量长话短说——开始吧。</p>
-<h2 id="为什么无法坚持"><a href="#为什么无法坚持" class="headerlink" title="为什么无法坚持"></a>为什么无法坚持</h2><p>普遍原因:</p>
-<ol>
-<li>习惯太难了。</li>
-<li>你不乐在其中。</li>
-<li>同时培养太多习惯(再次提醒养成习惯绝非易事!)。</li>
-<li>生活中还存在太多其他杂事。</li>
-<li>过程中发生了变故(生病，旅行，有人来访，工作中的大项目)。</li>
-<li>没有动力。</li>
-<li>自己放弃。</li>
-<li>中断了一两天从而感到沮丧。</li>
-</ol>
-<p>当然还有很多其他原因：总有人在你改变时打击你，或者你不够自信，或者一开始发力过猛导致热情消逝。</p>
-<h2 id="坚持习惯的守则"><a href="#坚持习惯的守则" class="headerlink" title="坚持习惯的守则"></a>坚持习惯的守则</h2><p>我们看到了很多需要面对的问题，看上去形势很不乐观？确实不简单，但绝对可行。值得一做的事总是需要付出努力。你只需要调整心态，让自己做好准备迎接不适感。</p>
-<p>我罗列了一些坚持养成习惯的守则，仅供参考。当然你可以无视它们，就像大多数人一样，然后你失败的机率会增加。或者，你可以尝试一下这些守则，看看它们是否有用(这因人而异，所以你必须要找出最适合自己的一套方法)。</p>
-<p>下面就是这些守则:</p>
-<ol>
-<li><strong>一次一个。</strong>没有比这一条更重要的了——大多数人无视这一条，因为他们低估了真正去坚持一个习惯所需要的意志力。开始一项习惯很简单，哪怕一次性开始5项，而坚持下去完全是另一码事。谨记一次只进行一个习惯——别幻想你能培养着一个健身的习惯，还一边来一个社交习惯，再来一个工作习惯等等。只培养一个习惯。不要挑战这一条。</li>
-<li><strong>将习惯最小化。</strong>养成习惯时别太在意结果。我曾提到最近我每天早上做3个瑜伽动作——因为我无法坚持一个多小时，时间一长我就想要放弃。但是，只做3个瑜伽动作能称得上优质的锻炼吗？不能！然而，当前我并不追求优质的锻炼，灵活的身体，更好的思维，或改善体型。但最终，是的，这些结果会成真。而现在，我只关心一件事：养成每天做瑜伽的习惯。让习惯的量越小越好。无论你觉得自己应该做多少量，减半。如果可能，再减半。如果时间超过两分钟，你可能需要考虑再减半。</li>
-<li><strong>一天一次。</strong>你可能幻想一次性就改变你的饮食习惯。醒醒吧。每天只将习惯执行一次，每次只是一两分钟。一旦习惯已经形成，你可以延长，但开始的三个礼拜别考虑延长的事。</li>
-<li><strong>注目于开始。</strong>你唯一需要做的就是开始行动。那是习惯的一部分，这在最初的一个月相当关键。在将来，或许你能跑完马拉松。但现在，只管穿上跑鞋走出家门。要冥想？只要把自己放到坐垫上。要开始健康饮食？只要将营养套餐(胡萝卜和鹰嘴豆泥？)放在面前并吃上第一口。要写作？只要关掉浏览器，新建一个空文件并敲出第一个句子。只要开始！</li>
-<li><strong>乐在其中。</strong>养成习惯时能立刻获得正面反馈太重要了。很多人想要建立的习惯不是自己真心喜欢的，这就是一种潜在的负面反馈，他们最终会抱怨自己为什么就坚持不下来。去养成一个你发自内心喜欢的习惯，或者找到能乐在其中的方法。关注积极的一面。另外，跟我朋友Tynan一样，奖励自己。让自己感到开心。这是能立刻获得的回报，也是很必要的。</li>
-<li><strong>监视自己的想法。</strong>如果你开始想要回避这个习惯，或者感觉做着不开心，或想要退出时，密切关注这些想法的出现。它们为什么会出现？你是不是在为退出找理由？你是不是会有负面消极的自言自语？这些想法都是不真实的——它们只是你大脑为了避免不适感的防御机制。让它们退散，不要让它们控制你。你可以用一些积极正面的自我激励来打败它们。</li>
-<li><strong>切忌连续两天错过。</strong>这是关键点。如果你有一天忘做了，牢记，谨记，和切记，你不会在接下来的一天也重蹈覆辙。错过了一天以后，立刻拉响所有的警报：你应该不惜一切代价不让自己连续错过两天。Tyran推荐<a href="http://tynan.com/training" target="_blank" rel="external">doubling down</a>这个方法，但不论你怎么做，别让自己再次失败。一旦失败了，你将永远不会形成习惯。Don’t do it.</li>
-<li><strong>负起责任。</strong>至少告诉一个人你要养成的习惯，这样会使你有责任感。4-5人的小组可能会更好。根据我的经验，这能使你坚持下去的成功率提升约50%。</li>
-</ol>
-<h2 id="怎样掌握习惯的技能"><a href="#怎样掌握习惯的技能" class="headerlink" title="怎样掌握习惯的技能"></a>怎样掌握习惯的技能</h2><p>上面的方法看上去有点多，很难一下子就掌握。没关系。让我们来说的简单一点。那就是:</p>
-<p><strong>最开始的时候，做最简单可行的习惯。</strong></p>
-<p>如果你还不是很擅长培养习惯(鉴于你在看这篇文章，很有可能你不是很擅长)，就从最基础的开始——别一开始就来高难度的。</p>
-<p>你需要从一些极其简单的练习开始培养习惯。或许看起来简单的有些荒唐，但想要有进步就拿出一些时间来做一些看似荒唐的事吧。</p>
-<p>下面是一些初级习惯的建议:</p>
-<ul>
-<li>每天喝一杯纯净水</li>
-<li>将你的衣物整理到收纳篮中</li>
-<li>吃完后洗餐具</li>
-<li>每天早上说「谢谢」</li>
-<li>每天下午喝茶</li>
-<li>吃一个水果</li>
-<li>每天写一句话</li>
-<li>用牙线洁一颗牙</li>
-</ul>
-<p>太简单了？挑战下有难度的吧，但如果你失败了，答应我尝试一下上述之一。</p>
-<p>原文: <a href="http://zenhabits.net/sticky/" target="_blank" rel="external">Sticking to a Habit: The Definitive Guide</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/01/13/rise-early/">
+    <link itemprop="mainEntityOfPage" href="http://zhaowen.me/2014/01/13/rise-early/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Zhao">
@@ -2006,7 +2028,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2129,7 +2151,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
