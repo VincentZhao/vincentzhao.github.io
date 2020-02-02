@@ -218,6 +218,11 @@ h6 {
   line-height: 1.5;
   font-family: 'Open Sans', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
+.post-body h2 {
+  padding-bottom: 5px;
+  margin: 25px 0 15px 0;
+  border-bottom: 1px dashed #dcdfe6;
+}
 h2,
 h3,
 h4,
@@ -1808,7 +1813,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #3c887e;
+  background: #ffdafe;
 }
 .links-of-blogroll {
   font-size: 13px;
